@@ -58,21 +58,13 @@
 
                 <!-- row 0 -->
                 <item row="0" column="0">
-                    <layout class="QVBoxLayout" name="verticalLayout_2">
-                        <item>
-                            <widget class="QLabel" name="label">
-                                <property name="text">
-                                    <string>Select Center Object</string>
-                                </property>
-                            </widget>
-                        </item>
-
+                    <layout class="QVBoxLayout" name="verticalLayout_2">x
                         <item>
                             <layout class="QHBoxLayout" name="horizontalLayout_4">
                                 <item>
                                     <widget class="QLabel" name="label_11">
                                         <property name="text">
-                                            <string>Current Center:</string>
+                                            <string>Current Object:</string>
                                         </property>
                                     </widget>
                                 </item>
@@ -89,13 +81,6 @@
                             </layout>
                         </item>
                     </layout>
-                </item>
-                <item row="0" column="1">
-                    <widget class="QPushButton" name="center_button">
-                        <property name="text">
-                            <string>Set</string>
-                        </property>
-                    </widget>
                 </item>
 
                  <!-- row 12 -->

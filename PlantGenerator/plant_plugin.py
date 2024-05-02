@@ -47,24 +47,20 @@ def showWindow():
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
     t = Transform()
-
-    #function for the clicked center object button
-    def clicked_center_button():
-        #get selected object(s)
-        selected = cmds.ls(sl=True,long=True) or []
-        if not(len(selected) == 1):
-            print("Please set center to be exactly 1 selected object.")
-        else: 
-            t.center = selected[0]
-        #Change location of locator to be at center object's pivot position
-        x = cmds.getAttr(t.center + ".translateX")
-        y = cmds.getAttr(t.center + ".translateY")
-        z = cmds.getAttr(t.center + ".translateZ")
-        #change ui text
-        ui.center_objs.setText(t.center[1:])
     
     #apply button clicked
     def apply():
+        #cmds.ls returns the list of objects selected
+        selected = cmds.ls(sl=True,long=True) or []
+        if not selected:
+            print("Please select an object.")
+        elif len(selected) > 1:
+            print("Please select only one object.")
+        else:
+            t.center = selected[0]
+            print("t name:",t.center) #t.center returns name of object t
+            ui.center_objs.setText(t.center[1:])
+
         #User error handling
         if t.center == None:
             ui.warnings.setText("<font color='red'>Warning:Please set a center object.</font>")
@@ -87,7 +83,6 @@ def showWindow():
         ui.done(0)
 
     #connect buttons to functions
-    ui.center_button.clicked.connect(partial(clicked_center_button))
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
      
