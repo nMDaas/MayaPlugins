@@ -42,8 +42,8 @@ def showWindow():
     
     ui.setParent(mayaMainWindow)
     ui.setWindowFlags(Qt.Window)
-    ui.setWindowTitle('Place Around Center Tool')
-    ui.setObjectName('Place_Around_Center')
+    ui.setWindowTitle('Plant Generator Tool')
+    ui.setObjectName('Plant_Generator')
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
     t = Transform()
