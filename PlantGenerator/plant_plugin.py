@@ -71,22 +71,16 @@ def showWindow():
             return
         else: # all proper fields have been set
             ui.warnings.setText("")
-
-        # t.center gets the name of the object
-        cmds.move( 5, 5, 5, t.center, absolute=True )
-
-        #print("T:", t.center)
-
         
         # Convert mesh vertices to vertex indices
-        #vertexIndices = cmds.polyListComponentConversion(t, toVertex=True)
-        #vertexList = cmds.ls(vertexIndices, flatten=True)
+        vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
+        vertexList = cmds.ls(vertexIndices, flatten=True)
 
         # Iterate over each vertex and get its position
-        #for vertex in vertexList:
+        for vertex in vertexList:
             # Get vertex position
-        #    vertexPosition = cmds.pointPosition(vertex, world=True)
-        #    print("Vertex:", vertex, "Position:", vertexPosition)
+            vertexPosition = cmds.pointPosition(vertex, world=True)
+            print("Vertex:", vertex, "Position:", vertexPosition)
 
 #Close dialog
     def close():
