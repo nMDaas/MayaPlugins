@@ -64,14 +64,14 @@ def showWindow():
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
     ui.X_input.setEnabled(False)
-    ui.vertical_input.setEnabled(False)
+    ui.Y_input.setEnabled(False)
 
     t = Transform()
 
     global applyXDistort
     applyXDistort = False
-    global applyVerticalDistort
-    applyVerticalDistort = False
+    global applyYDistort
+    applyYDistort = False
 
     #set object to be manupilated
     def setSelectedObject():
@@ -95,14 +95,14 @@ def showWindow():
         else:
             ui.X_input.setEnabled(False)
 
-    #toggle applyVerticalDistort
-    def set_applyVerticalDistort():
-        global applyVerticalDistort 
-        applyVerticalDistort = ui.vertical_checkbox.checkState()
-        if applyVerticalDistort:
-            ui.vertical_input.setEnabled(True)
+    #toggle appyYDistort
+    def set_applyYDistort():
+        global applyYDistort 
+        applyYDistort = ui.Y_checkbox.checkState()
+        if applyYDistort:
+            ui.Y_input.setEnabled(True)
         else:
-            ui.vertical_input.setEnabled(False)
+            ui.Y_input.setEnabled(False)
 
     #manupilates vertices of object selected in X axis
     def distortVerticesInX():
@@ -123,10 +123,9 @@ def showWindow():
             #increment count
             count = count + 1
 
-    #manupilates vertices of object selected vertically
-    def distortVerticesVertically():
-        print("distortVerticesVertically called")
-        global vertical_distort_range
+    #manupilates vertices of object selected in Y axis
+    def distortVerticesInY():
+        global Y_distort_range
         global vertexList
 
         count = 0
@@ -134,12 +133,12 @@ def showWindow():
         # Iterate over each vertex and get its position
         for vertex in vertexList:
             #get random distort amount
-            randVerticalDistort = random.random() * vertical_distort_range
+            randYDistort = random.random() * Y_distort_range
             #get vertex name
             vertexName = t.center + ".vtx[" + str(count) + "]"
             #transform vertex in x
             vertexPosition = cmds.pointPosition(vertex, world=True)
-            cmds.xform(vertexName,worldSpace=True, translation=(vertexPosition[0],vertexPosition[1] + randVerticalDistort,vertexPosition[2]))
+            cmds.xform(vertexName,worldSpace=True, translation=(vertexPosition[0],vertexPosition[1] + randYDistort,vertexPosition[2]))
             #increment count
             count = count + 1
 
@@ -147,9 +146,9 @@ def showWindow():
         global X_distort_range
         X_distort_range = float(hRange)
 
-    def set_verticalDistortRange(vRange):
-        global vertical_distort_range
-        vertical_distort_range = float(vRange)
+    def set_YDistortRange(vRange):
+        global Y_distort_range
+        Y_distort_range = float(vRange)
 
     #apply button clicked
     @one_undo
@@ -169,15 +168,13 @@ def showWindow():
         vertexList = cmds.ls(vertexIndices, flatten=True)
 
         global applyXDistort
-        global applyVerticalDistort
-
-        print('applyVerticalDistort: ', applyVerticalDistort)
+        global applyYDistort
         
         if applyXDistort:
             distortVerticesInX()
 
-        if applyVerticalDistort:
-            distortVerticesVertically()
+        if applyYDistort:
+            distortVerticesInY()
         
 
 #Close dialog
@@ -188,9 +185,9 @@ def showWindow():
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
     ui.X_checkbox.clicked.connect(partial(set_applyXDistort))
-    ui.vertical_checkbox.clicked.connect(partial(set_applyVerticalDistort))
+    ui.Y_checkbox.clicked.connect(partial(set_applyYDistort))
     ui.X_input.valueChanged.connect(partial(set_XDistortRange))
-    ui.vertical_input.valueChanged.connect(partial(set_verticalDistortRange))
+    ui.Y_input.valueChanged.connect(partial(set_YDistortRange))
      
     # show the QT ui
     ui.show()

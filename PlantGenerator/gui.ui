@@ -103,14 +103,14 @@
                         </item>
 
                         <item row="2" column="0">
-                            <widget class="QCheckBox" name="vertical_checkbox">
+                            <widget class="QCheckBox" name="Y_checkbox">
                                 <property name="text">
                                     <string>Y</string>
                                 </property>
                             </widget>
                         </item>
                         <item row="2" column="1">
-                            <widget class="QDoubleSpinBox" name="vertical_input"/>
+                            <widget class="QDoubleSpinBox" name="Y_input"/>
                         </item>
                     </layout>
                 </item>
