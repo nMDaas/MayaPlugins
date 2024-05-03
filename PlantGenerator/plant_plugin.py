@@ -47,6 +47,7 @@ def showWindow():
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
     t = Transform()
+    horizontalDistort = 0
 
     #set object to be manupilated
     def setSelectedObject():
@@ -61,13 +62,22 @@ def showWindow():
             print("t name:",t.center) #t.center returns name of object t
             ui.center_objs.setText(t.center[1:])
 
-    #horizontal distort set to true
+    #toggle horizontalDistort
     def set_horizontal_distort():
+        global horizontalDistort
         horizontalDistort = ui.horizontal_checkbox.checkState()
         if horizontalDistort:
             print("Horizontal checkbox clicked")
         else:
             print("Horizontal checkbox NOT clicked")
+
+    def distortVerticesHorizontally(vertexList):
+        # Iterate over each vertex and get its position
+        for vertex in vertexList:
+            # Get vertex position
+            vertexPosition = cmds.pointPosition(vertex, world=True)
+            print("Vertex:", vertex, "Position:", vertexPosition)
+
     
     #apply button clicked
     def apply():
@@ -84,11 +94,12 @@ def showWindow():
         vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
         vertexList = cmds.ls(vertexIndices, flatten=True)
 
-        # Iterate over each vertex and get its position
-        for vertex in vertexList:
-            # Get vertex position
-            vertexPosition = cmds.pointPosition(vertex, world=True)
-            print("Vertex:", vertex, "Position:", vertexPosition)
+        global horizontalDistort
+
+        if horizontalDistort:
+            distortVerticesHorizontally(vertexList)
+        else:
+            print("Horizontal checkbox NOT clicked")
 
 #Close dialog
     def close():
