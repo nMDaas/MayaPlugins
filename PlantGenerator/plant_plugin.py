@@ -60,6 +60,14 @@ def showWindow():
             t.center = selected[0]
             print("t name:",t.center) #t.center returns name of object t
             ui.center_objs.setText(t.center[1:])
+
+    #horizontal distort set to true
+    def set_horizontal_distort():
+        horizontalDistort = ui.horizontal_checkbox.checkState()
+        if horizontalDistort:
+            print("Horizontal checkbox clicked")
+        else:
+            print("Horizontal checkbox NOT clicked")
     
     #apply button clicked
     def apply():
@@ -89,6 +97,7 @@ def showWindow():
     #connect buttons to functions
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
+    ui.horizontal_checkbox.clicked.connect(partial(set_horizontal_distort))
      
     # show the QT ui
     ui.show()
