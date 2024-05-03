@@ -46,6 +46,8 @@ def showWindow():
     ui.setObjectName('Plant_Generator')
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
+    ui.horizontal_box.setEnabled(False)
+
     t = Transform()
     horizontalDistort = 0
 
@@ -66,6 +68,10 @@ def showWindow():
     def set_horizontal_distort():
         global horizontalDistort
         horizontalDistort = ui.horizontal_checkbox.checkState()
+        if horizontalDistort:
+            ui.horizontal_box.setEnabled(True)
+        else:
+            ui.horizontal_box.setEnabled(False)
 
     def distortVerticesHorizontally(vertexList):
         # Iterate over each vertex and get its position
