@@ -64,8 +64,14 @@ def showWindow():
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
     ui.horizontal_input.setEnabled(False)
+    ui.vertical_input.setEnabled(False)
 
     t = Transform()
+
+    global applyHorizontalDistort
+    applyHorizontalDistort = False
+    global applyVerticalDistort
+    applyVerticalDistort = False
 
     #set object to be manupilated
     def setSelectedObject():
@@ -89,8 +95,18 @@ def showWindow():
         else:
             ui.horizontal_input.setEnabled(False)
 
-    #manupilates vertices of object selected
+    #toggle applyVerticalDistort
+    def set_applyVerticalDistort():
+        global applyVerticalDistort 
+        applyVerticalDistort = ui.vertical_checkbox.checkState()
+        if applyVerticalDistort:
+            ui.vertical_input.setEnabled(True)
+        else:
+            ui.vertical_input.setEnabled(False)
+
+    #manupilates vertices of object selected horizontally
     def distortVerticesHorizontally():
+        print("distortVerticesHorizontally called")
         global horizontal_distort_range
         global vertexList
 
@@ -108,9 +124,33 @@ def showWindow():
             #increment count
             count = count + 1
 
+    #manupilates vertices of object selected vertically
+    def distortVerticesVertically():
+        print("distortVerticesVertically called")
+        global vertical_distort_range
+        global vertexList
+
+        count = 0
+
+        # Iterate over each vertex and get its position
+        for vertex in vertexList:
+            #get random distort amount
+            randVerticalDistort = random.random() * vertical_distort_range
+            #get vertex name
+            vertexName = t.center + ".vtx[" + str(count) + "]"
+            #transform vertex horizontally
+            vertexPosition = cmds.pointPosition(vertex, world=True)
+            cmds.xform(vertexName,worldSpace=True, translation=(vertexPosition[0],vertexPosition[1] + randVerticalDistort,vertexPosition[2]))
+            #increment count
+            count = count + 1
+
     def set_horizontalDistortRange(hRange):
         global horizontal_distort_range
         horizontal_distort_range = float(hRange)
+
+    def set_verticalDistortRange(vRange):
+        global vertical_distort_range
+        vertical_distort_range = float(vRange)
 
     #apply button clicked
     @one_undo
@@ -130,15 +170,16 @@ def showWindow():
         vertexList = cmds.ls(vertexIndices, flatten=True)
 
         global applyHorizontalDistort
-        global horizontal_distort_range
+        global applyVerticalDistort
 
+        print('applyHorizontalDistort: ', applyHorizontalDistort)
+        print('applyVerticalDistort: ', applyVerticalDistort)
+        
         if applyHorizontalDistort:
             distortVerticesHorizontally()
 
-        for vertex in vertexList:
-            # Get vertex position
-            vertexPosition = cmds.pointPosition(vertex, world=True)
-            print("Vertex:", vertex, "Position:", vertexPosition)
+        if applyVerticalDistort:
+            distortVerticesVertically()
         
 
 #Close dialog
@@ -149,7 +190,9 @@ def showWindow():
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
     ui.horizontal_checkbox.clicked.connect(partial(set_applyHorizontalDistort))
+    ui.vertical_checkbox.clicked.connect(partial(set_applyVerticalDistort))
     ui.horizontal_input.valueChanged.connect(partial(set_horizontalDistortRange))
+    ui.vertical_input.valueChanged.connect(partial(set_verticalDistortRange))
      
     # show the QT ui
     ui.show()

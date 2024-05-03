@@ -97,6 +97,9 @@
                                 </property>
                             </widget>
                         </item>
+                        <item row="2" column="1">
+                            <widget class="QDoubleSpinBox" name="vertical_input"/>
+                        </item>
                     </layout>
                 </item>
 
