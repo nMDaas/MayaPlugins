@@ -73,17 +73,24 @@ def showWindow():
         else:
             ui.horizontal_input.setEnabled(False)
 
-    def distortVerticesHorizontally(vertexList):
+    #manupilates vertices of object selected
+    def distortVerticesHorizontally():
         global horizontal_range
+        global vertexList
+
+        count = 0
 
         # Iterate over each vertex and get its position
         for vertex in vertexList:
             #get random distort amount
-            print ("random: ", random.random() * horizontal_range)
-
-            # Get vertex position
-            #vertexPosition = cmds.pointPosition(vertex, world=True)
-           # print("Vertex:", vertex, "Position:", vertexPosition)
+            randHorizontalDistort = random.random() * horizontal_range
+            #get vertex name
+            vertexName = t.center + ".vtx[" + str(count) + "]"
+            #transform vertex horizontally
+            vertexPosition = cmds.pointPosition(vertex, world=True)
+            cmds.xform(vertexName,worldSpace=True, translation=(vertexPosition[0] + randHorizontalDistort,vertexPosition[1],vertexPosition[2]))
+            #increment count
+            count = count + 1
 
     def set_horizontal_range(hRange):
         global horizontal_range
@@ -102,16 +109,20 @@ def showWindow():
         
         # Convert mesh vertices to vertex indices
         vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
+        global vertexList
         vertexList = cmds.ls(vertexIndices, flatten=True)
 
         global horizontalDistort
         global horizontal_range
 
         if horizontalDistort:
-            distortVerticesHorizontally(vertexList)
-            print("horizontal range: ",horizontal_range)
-        else:
-            print("Horizontal checkbox NOT clicked")
+            distortVerticesHorizontally()
+
+        for vertex in vertexList:
+            # Get vertex position
+            vertexPosition = cmds.pointPosition(vertex, world=True)
+            print("Vertex:", vertex, "Position:", vertexPosition)
+        
 
 #Close dialog
     def close():
