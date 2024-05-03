@@ -63,15 +63,7 @@ def showWindow():
     ui.setObjectName('Plant_Generator')
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
-    ui.X_input.setEnabled(False)
-    ui.Y_input.setEnabled(False)
-
     t = Transform()
-
-    global applyXDistort
-    applyXDistort = False
-    global applyYDistort
-    applyYDistort = False
 
     #set object to be manupilated
     def setSelectedObject():
@@ -85,24 +77,6 @@ def showWindow():
             t.center = selected[0]
             print("t name:",t.center) #t.center returns name of object t
             ui.center_objs.setText(t.center[1:])
-
-    #toggle applyXDistort
-    def set_applyXDistort():
-        global applyXDistort 
-        applyXDistort = ui.X_checkbox.checkState()
-        if applyXDistort:
-            ui.X_input.setEnabled(True)
-        else:
-            ui.X_input.setEnabled(False)
-
-    #toggle appyYDistort
-    def set_applyYDistort():
-        global applyYDistort 
-        applyYDistort = ui.Y_checkbox.checkState()
-        if applyYDistort:
-            ui.Y_input.setEnabled(True)
-        else:
-            ui.Y_input.setEnabled(False)
 
     #manupilates vertices of object selected in X axis
     def distortVerticesInX():
@@ -167,14 +141,9 @@ def showWindow():
         global vertexList
         vertexList = cmds.ls(vertexIndices, flatten=True)
 
-        global applyXDistort
-        global applyYDistort
         
-        if applyXDistort:
-            distortVerticesInX()
-
-        if applyYDistort:
-            distortVerticesInY()
+        distortVerticesInX()
+        distortVerticesInY()
         
 
 #Close dialog
@@ -184,8 +153,6 @@ def showWindow():
     #connect buttons to functions
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
-    ui.X_checkbox.clicked.connect(partial(set_applyXDistort))
-    ui.Y_checkbox.clicked.connect(partial(set_applyYDistort))
     ui.X_input.valueChanged.connect(partial(set_XDistortRange))
     ui.Y_input.valueChanged.connect(partial(set_YDistortRange))
      

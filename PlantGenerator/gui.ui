@@ -92,9 +92,9 @@
                 <item row="2" column="1">
                     <layout class="QGridLayout" name="gridLayout_4" >
                         <item row="0" column="0">
-                            <widget class="QCheckBox" name="X_checkbox">
+                            <widget class="QLabel">
                                 <property name="text">
-                                    <string>X</string>
+                                    <string>X: </string>
                                 </property>
                             </widget>
                         </item>
@@ -103,9 +103,9 @@
                         </item>
 
                         <item row="2" column="0">
-                            <widget class="QCheckBox" name="Y_checkbox">
+                            <widget class="QLabel">
                                 <property name="text">
-                                    <string>Y</string>
+                                    <string>Y: </string>
                                 </property>
                             </widget>
                         </item>
