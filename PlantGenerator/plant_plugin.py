@@ -82,7 +82,7 @@ def showWindow():
 
     #toggle applyHorizontalDistort
     def set_applyHorizontalDistort():
-        global applyHorizontalDistort
+        global applyHorizontalDistort 
         applyHorizontalDistort = ui.horizontal_checkbox.checkState()
         if applyHorizontalDistort:
             ui.horizontal_input.setEnabled(True)
