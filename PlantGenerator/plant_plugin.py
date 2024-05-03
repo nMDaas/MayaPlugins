@@ -66,17 +66,17 @@ def showWindow():
     def set_horizontal_distort():
         global horizontalDistort
         horizontalDistort = ui.horizontal_checkbox.checkState()
-        if horizontalDistort:
-            print("Horizontal checkbox clicked")
-        else:
-            print("Horizontal checkbox NOT clicked")
 
     def distortVerticesHorizontally(vertexList):
         # Iterate over each vertex and get its position
         for vertex in vertexList:
+            max_distort = 10
+            #get random distort amount
+            print ("random: ", random.random() * 10)
+
             # Get vertex position
-            vertexPosition = cmds.pointPosition(vertex, world=True)
-            print("Vertex:", vertex, "Position:", vertexPosition)
+            #vertexPosition = cmds.pointPosition(vertex, world=True)
+           # print("Vertex:", vertex, "Position:", vertexPosition)
 
     
     #apply button clicked
