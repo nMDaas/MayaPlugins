@@ -42,14 +42,14 @@ def showWindow():
     
     ui.setParent(mayaMainWindow)
     ui.setWindowFlags(Qt.Window)
-    ui.setWindowTitle('Plant Generator Tool')
-    ui.setObjectName('Plant_Generator')
+    ui.setWindowTitle('Place Around Center Tool')
+    ui.setObjectName('Place_Around_Center')
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
     t = Transform()
-    
-    #apply button clicked
-    def apply():
+
+    #set object to be manupilated
+    def setSelectedObject():
         #cmds.ls returns the list of objects selected
         selected = cmds.ls(sl=True,long=True) or []
         if not selected:
@@ -60,6 +60,10 @@ def showWindow():
             t.center = selected[0]
             print("t name:",t.center) #t.center returns name of object t
             ui.center_objs.setText(t.center[1:])
+    
+    #apply button clicked
+    def apply():
+        setSelectedObject()
 
         #User error handling
         if t.center == None:
