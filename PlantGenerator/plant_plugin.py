@@ -65,6 +65,13 @@ def showWindow():
 
     t = Transform()
 
+    global X_distort_range
+    global Y_distort_range
+    global Z_distort_range
+    X_distort_range = 0
+    Y_distort_range = 0
+    Z_distort_range = 0
+
     #set object to be manupilated
     def setSelectedObject():
         #cmds.ls returns the list of objects selected
@@ -116,13 +123,36 @@ def showWindow():
             #increment count
             count = count + 1
 
-    def set_XDistortRange(hRange):
-        global X_distort_range
-        X_distort_range = float(hRange)
+    #manupilates vertices of object selected in Z axis
+    def distortVerticesInZ():
+        global Z_distort_range
+        global vertexList
 
-    def set_YDistortRange(vRange):
+        count = 0
+
+        # Iterate over each vertex and get its position
+        for vertex in vertexList:
+            #get random distort amount
+            randZDistort = random.random() * Z_distort_range
+            #get vertex name
+            vertexName = t.center + ".vtx[" + str(count) + "]"
+            #transform vertex in x
+            vertexPosition = cmds.pointPosition(vertex, world=True)
+            cmds.xform(vertexName,worldSpace=True, translation=(vertexPosition[0],vertexPosition[1],vertexPosition[2] + randZDistort))
+            #increment count
+            count = count + 1
+
+    def set_XDistortRange(xRange):
+        global X_distort_range
+        X_distort_range = float(xRange)
+
+    def set_YDistortRange(yRange):
         global Y_distort_range
-        Y_distort_range = float(vRange)
+        Y_distort_range = float(yRange)
+
+    def set_ZDistortRange(zRange):
+        global Z_distort_range
+        Z_distort_range = float(zRange)
 
     #apply button clicked
     @one_undo
@@ -144,6 +174,7 @@ def showWindow():
         
         distortVerticesInX()
         distortVerticesInY()
+        distortVerticesInZ()
         
 
 #Close dialog
@@ -155,6 +186,7 @@ def showWindow():
     ui.close_button.clicked.connect(partial(close))
     ui.X_input.valueChanged.connect(partial(set_XDistortRange))
     ui.Y_input.valueChanged.connect(partial(set_YDistortRange))
+    ui.Z_input.valueChanged.connect(partial(set_ZDistortRange))
      
     # show the QT ui
     ui.show()
