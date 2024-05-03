@@ -92,14 +92,14 @@
                 <item row="2" column="1">
                     <layout class="QGridLayout" name="gridLayout_4" >
                         <item row="0" column="0">
-                            <widget class="QCheckBox" name="horizontal_checkbox">
+                            <widget class="QCheckBox" name="X_checkbox">
                                 <property name="text">
                                     <string>X</string>
                                 </property>
                             </widget>
                         </item>
                         <item row="0" column="1">
-                            <widget class="QDoubleSpinBox" name="horizontal_input"/>
+                            <widget class="QDoubleSpinBox" name="X_input"/>
                         </item>
 
                         <item row="2" column="0">
