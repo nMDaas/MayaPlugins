@@ -46,7 +46,7 @@ def showWindow():
     ui.setObjectName('Plant_Generator')
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
-    ui.horizontal_box.setEnabled(False)
+    ui.horizontal_input.setEnabled(False)
 
     t = Transform()
     horizontalDistort = 0
@@ -69,21 +69,25 @@ def showWindow():
         global horizontalDistort
         horizontalDistort = ui.horizontal_checkbox.checkState()
         if horizontalDistort:
-            ui.horizontal_box.setEnabled(True)
+            ui.horizontal_input.setEnabled(True)
         else:
-            ui.horizontal_box.setEnabled(False)
+            ui.horizontal_input.setEnabled(False)
 
     def distortVerticesHorizontally(vertexList):
+        global horizontal_range
+
         # Iterate over each vertex and get its position
         for vertex in vertexList:
-            max_distort = 10
             #get random distort amount
-            print ("random: ", random.random() * 10)
+            print ("random: ", random.random() * horizontal_range)
 
             # Get vertex position
             #vertexPosition = cmds.pointPosition(vertex, world=True)
            # print("Vertex:", vertex, "Position:", vertexPosition)
 
+    def set_horizontal_range(hRange):
+        global horizontal_range
+        horizontal_range = float(hRange)
     
     #apply button clicked
     def apply():
@@ -101,9 +105,11 @@ def showWindow():
         vertexList = cmds.ls(vertexIndices, flatten=True)
 
         global horizontalDistort
+        global horizontal_range
 
         if horizontalDistort:
             distortVerticesHorizontally(vertexList)
+            print("horizontal range: ",horizontal_range)
         else:
             print("Horizontal checkbox NOT clicked")
 
@@ -115,6 +121,7 @@ def showWindow():
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
     ui.horizontal_checkbox.clicked.connect(partial(set_horizontal_distort))
+    ui.horizontal_input.valueChanged.connect(partial(set_horizontal_range))
      
     # show the QT ui
     ui.show()
