@@ -14,6 +14,7 @@ import math
 from shiboken2 import wrapInstance
 from random import randrange
 import random
+from functools import wraps
 
 #keep track of transform settings created by user
 class Transform():
@@ -25,6 +26,22 @@ class Transform():
         self.shape = None
         self.duplicate = False
         self.num_duplicate = 0
+
+def one_undo(func):
+    """
+    Decorator - guarantee close chunk.
+    type: (function) -> function
+    """
+    @wraps(func)
+    def wrap(*args, **kwargs):
+        try:
+            cmds.undoInfo(openChunk=True)
+            return func(*args, **kwargs)
+        except Exception as e:
+            raise e
+        finally:
+            cmds.undoInfo(closeChunk=True)
+    return wrap
         
 #show gui window
 def showWindow():
@@ -95,8 +112,9 @@ def showWindow():
     def set_horizontal_range(hRange):
         global horizontal_range
         horizontal_range = float(hRange)
-    
+
     #apply button clicked
+    @one_undo
     def apply():
         setSelectedObject()
 
