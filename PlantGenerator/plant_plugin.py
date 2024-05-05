@@ -154,6 +154,9 @@ def showWindow():
         global Z_distort_range
         Z_distort_range = float(zRange)
 
+    def duplicateObj():
+        cmds.duplicate( t.center, rr=True ) #what does rr=True do?
+
     #apply button clicked
     @one_undo
     def apply():
@@ -165,16 +168,18 @@ def showWindow():
             return
         else: # all proper fields have been set
             ui.warnings.setText("")
+
+        duplicateObj()
         
         # Convert mesh vertices to vertex indices
-        vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
-        global vertexList
-        vertexList = cmds.ls(vertexIndices, flatten=True)
+        #vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
+        #global vertexList
+        #vertexList = cmds.ls(vertexIndices, flatten=True)
 
         
-        distortVerticesInX()
-        distortVerticesInY()
-        distortVerticesInZ()
+        #distortVerticesInX()
+        #distortVerticesInY()
+        #distortVerticesInZ()
         
 
 #Close dialog
