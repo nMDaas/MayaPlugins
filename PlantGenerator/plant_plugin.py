@@ -238,8 +238,8 @@ def showWindow():
     ui.Y_input.valueChanged.connect(partial(set_YDistortRange))
     ui.Z_input.valueChanged.connect(partial(set_ZDistortRange))
     ui.count_input.valueChanged.connect(partial(set_numDistortions))
-    ui.min_input.valueChanged.connect(partial(set_minDistortion))
-    ui.max_input.valueChanged.connect(partial(set_maxDistortion))
+    ui.X_min_input.valueChanged.connect(partial(set_minDistortion))
+    ui.X_max_input.valueChanged.connect(partial(set_maxDistortion))
      
     # show the QT ui
     ui.show()

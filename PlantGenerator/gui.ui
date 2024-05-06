@@ -8,7 +8,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>463</width>
-                <height>350</height>
+                <height>400</height>
             </rect>
         </property>
 
@@ -162,24 +162,66 @@
                         <item row="1" column="0">
                             <widget class="QLabel">
                                 <property name="text">
-                                    <string>Min: </string>
+                                    <string>X Min: </string>
                                 </property>
                             </widget>
                         </item>
                         <item row="1" column="1">
-                            <widget class="QDoubleSpinBox" name="min_input"/>
+                            <widget class="QDoubleSpinBox" name="X_min_input"/>
                         </item>
-
                         <item row="1" column="2">
                             <widget class="QLabel">
                                 <property name="text">
-                                    <string>Max: </string>
+                                    <string>X Max: </string>
                                 </property>
                             </widget>
                         </item>
                         <item row="1" column="3">
-                            <widget class="QDoubleSpinBox" name="max_input"/>
+                            <widget class="QDoubleSpinBox" name="X_max_input"/>
                         </item>
+
+                        <item row="2" column="0">
+                            <widget class="QLabel">
+                                <property name="text">
+                                    <string>Y Min: </string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="2" column="1">
+                            <widget class="QDoubleSpinBox" name="Y_min_input"/>
+                        </item>
+                        <item row="2" column="2">
+                            <widget class="QLabel">
+                                <property name="text">
+                                    <string>Y Max: </string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="2" column="3">
+                            <widget class="QDoubleSpinBox" name="Y_max_input"/>
+                        </item>
+
+                        <item row="3" column="0">
+                            <widget class="QLabel">
+                                <property name="text">
+                                    <string>Z Min: </string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="3" column="1">
+                            <widget class="QDoubleSpinBox" name="Z_min_input"/>
+                        </item>
+                        <item row="3" column="2">
+                            <widget class="QLabel">
+                                <property name="text">
+                                    <string>Z Max: </string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="3" column="3">
+                            <widget class="QDoubleSpinBox" name="Z_max_input"/>
+                        </item>
+
                     </layout>
                 </item>
 
@@ -199,7 +241,7 @@
             <property name="geometry">
                 <rect>
                     <x>20</x>
-                    <y>230</y>
+                    <y>280</y>
                     <width>100</width>
                     <height>32</height>
                 </rect>
@@ -213,7 +255,7 @@
             <property name="geometry">
                 <rect>
                     <x>20</x>
-                    <y>270</y>
+                    <y>320</y>
                     <width>100</width>
                     <height>32</height>
                 </rect>
