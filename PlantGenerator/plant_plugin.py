@@ -187,21 +187,33 @@ def showWindow():
         randIndex = (int) (random.random() * numVertexIndices) + 1
         print("randIndex: ", randIndex)
 
-    def applyDistortions():
-        global numDistortions
+        global vertexList
+        cmds.select(vertexList[randIndex])
+
+        cmds.softSelect(softSelectEnabled=True)  # Enable soft selection
+        cmds.softSelect(sse=1,ssd=2.0,ssc='0,1,2,1,0,2',ssf=2)
+
+        # Get the selected vertices and their surrounding vertices
+        selected_vertices = cmds.ls(selection=True, flatten=True)
+        cmds.select(selected_vertices)
+
         global minDistortion
         global maxDistortion
+        randDistortionX = (random.random() * maxDistortion) + minDistortion
+        randDistortionY = (random.random() * maxDistortion) + minDistortion
+        randDistortionZ = (random.random() * maxDistortion) + minDistortion
 
+        cmds.move(randDistortionX, randDistortionY, randDistortionZ, relative=True)
+
+    def applyDistortions():
+        global numDistortions
+        
         # get number of vertices
         numVertexIndices = cmds.polyEvaluate(t.center, vertex=True)
-        print("numVertices: ", numVertexIndices)
 
         #create numDistortions number of distortions
         for count in range(numDistortions):
             createDistortion(numVertexIndices)
-
-        # global vertexList
-        # vertexList = cmds.ls(vertexIndices, flatten=True)
 
     #apply button clicked
     @one_undo
@@ -215,14 +227,14 @@ def showWindow():
         else: # all proper fields have been set
             ui.warnings.setText("")
 
+        #convert mesh vertices to vertex indices
+        vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
+        global vertexList
+        vertexList = cmds.ls(vertexIndices, flatten=True)
+
         applyDistortions()
 
         #duplicateObj()
-        
-        #convert mesh vertices to vertex indices
-        # vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
-        # global vertexList
-        # vertexList = cmds.ls(vertexIndices, flatten=True)
 
         # getSurroundingVertices()
         
