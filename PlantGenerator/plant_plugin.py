@@ -154,6 +154,18 @@ def showWindow():
         global Z_distort_range
         Z_distort_range = float(zRange)
 
+    def set_numDistortions(num):
+        global numDistortions
+        numDistortions = int(num)
+
+    def set_minDistortion(min):
+        global minDistortion
+        minDistortion = float(min)
+
+    def set_maxDistortion(max):
+        global maxDistortion
+        maxDistortion = float(max)
+
     def duplicateObj():
         cmds.duplicate( t.center, rr=True ) #what does rr=True do?
 
@@ -171,6 +183,11 @@ def showWindow():
 
         cmds.move(1.0, 0.0, 0.0, relative=True)
 
+    def applyDistort():
+        print("numDistortions: ", numDistortions)
+        print("minDistortion: ", minDistortion)
+        print("maxDistortion: ", maxDistortion)
+
     #apply button clicked
     @one_undo
     def apply():
@@ -183,14 +200,16 @@ def showWindow():
         else: # all proper fields have been set
             ui.warnings.setText("")
 
+        applyDistort()
+
         #duplicateObj()
         
         #convert mesh vertices to vertex indices
-        vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
-        global vertexList
-        vertexList = cmds.ls(vertexIndices, flatten=True)
+        # vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
+        # global vertexList
+        # vertexList = cmds.ls(vertexIndices, flatten=True)
 
-        getSurroundingVertices()
+        # getSurroundingVertices()
         
         #distortVerticesInX()
         #distortVerticesInY()
@@ -207,6 +226,9 @@ def showWindow():
     ui.X_input.valueChanged.connect(partial(set_XDistortRange))
     ui.Y_input.valueChanged.connect(partial(set_YDistortRange))
     ui.Z_input.valueChanged.connect(partial(set_ZDistortRange))
+    ui.count_input.valueChanged.connect(partial(set_numDistortions))
+    ui.min_input.valueChanged.connect(partial(set_minDistortion))
+    ui.max_input.valueChanged.connect(partial(set_maxDistortion))
      
     # show the QT ui
     ui.show()
