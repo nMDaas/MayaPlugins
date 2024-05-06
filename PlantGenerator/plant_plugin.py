@@ -169,20 +169,6 @@ def showWindow():
     def duplicateObj():
         cmds.duplicate( t.center, rr=True ) #what does rr=True do?
 
-    def getSurroundingVertices():
-        global vertexList
-
-        cmds.select(vertexList[841])
-
-        cmds.softSelect(softSelectEnabled=True)  # Enable soft selection
-        cmds.softSelect(sse=1,ssd=2.0,ssc='0,1,2,1,0,2',ssf=2)
-
-        # Get the selected vertices and their surrounding vertices
-        selected_vertices = cmds.ls(selection=True, flatten=True)
-        cmds.select(selected_vertices)
-
-        cmds.move(1.0, 0.0, 0.0, relative=True)
-
     def createDistortion(numVertexIndices):
         randIndex = (int) (random.random() * numVertexIndices) + 1
         print("randIndex: ", randIndex)
@@ -235,8 +221,6 @@ def showWindow():
         applyDistortions()
 
         #duplicateObj()
-
-        # getSurroundingVertices()
         
         #distortVerticesInX()
         #distortVerticesInY()
