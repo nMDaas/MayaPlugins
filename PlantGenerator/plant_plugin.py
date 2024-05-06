@@ -169,7 +169,7 @@ def showWindow():
         selected_vertices = cmds.ls(selection=True, flatten=True)
         cmds.select(selected_vertices)
 
-        cmds.move(0.0, 1.0, 0.0, relative=True)
+        cmds.move(1.0, 0.0, 0.0, relative=True)
 
     #apply button clicked
     @one_undo
