@@ -157,6 +157,20 @@ def showWindow():
     def duplicateObj():
         cmds.duplicate( t.center, rr=True ) #what does rr=True do?
 
+    def getSurroundingVertices():
+        global vertexList
+
+        cmds.select(vertexList[841])
+
+        cmds.softSelect(softSelectEnabled=True)  # Enable soft selection
+        cmds.softSelect(sse=1,ssd=2.0,ssc='0,1,2,1,0,2',ssf=2)
+
+        # Get the selected vertices and their surrounding vertices
+        selected_vertices = cmds.ls(selection=True, flatten=True)
+        cmds.select(selected_vertices)
+
+        cmds.move(0.0, 1.0, 0.0, relative=True)
+
     #apply button clicked
     @one_undo
     def apply():
@@ -169,13 +183,14 @@ def showWindow():
         else: # all proper fields have been set
             ui.warnings.setText("")
 
-        duplicateObj()
+        #duplicateObj()
         
-        # Convert mesh vertices to vertex indices
-        #vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
-        #global vertexList
-        #vertexList = cmds.ls(vertexIndices, flatten=True)
+        #convert mesh vertices to vertex indices
+        vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
+        global vertexList
+        vertexList = cmds.ls(vertexIndices, flatten=True)
 
+        getSurroundingVertices()
         
         #distortVerticesInX()
         #distortVerticesInY()
