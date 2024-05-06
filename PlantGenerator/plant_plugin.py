@@ -195,9 +195,6 @@ def showWindow():
         global ZmaxDistortion
         ZmaxDistortion = float(max)
 
-    def duplicateObj():
-        cmds.duplicate( t.center, rr=True ) #what does rr=True do?
-
     def createDistortion(numVertexIndices):
         randIndex = (int) (random.random() * numVertexIndices) + 1
         print("randIndex: ", randIndex)
@@ -224,15 +221,42 @@ def showWindow():
 
         cmds.move(randDistortionX, randDistortionY, randDistortionZ, relative=True)
 
-    def applyDistortions():
+    def applyDistortions(duplicateName):
         global numDistortions
         
         # get number of vertices
-        numVertexIndices = cmds.polyEvaluate(t.center, vertex=True)
+        numVertexIndices = cmds.polyEvaluate(duplicateName, vertex=True)
 
         #create numDistortions number of distortions
         for count in range(numDistortions):
             createDistortion(numVertexIndices)
+
+    def duplicateObj():
+        global duplicateName
+        original_object = t.center  # Assuming "t.center" is the name of your original object
+        duplicateName = original_object + "copy"
+        #cmds.duplicate(original_object)
+        cmds.duplicate( t.center, rr=False, name=duplicateName)
+
+    def isolateObject(objName):
+        all_objects = cmds.ls(type='transform', long=True)
+        for obj in all_objects:
+            if obj != objName:
+                cmds.setAttr(obj + ".visibility", 0)  # Hide the object
+            else:
+                cmds.setAttr(obj + ".visibility", 1)  # Show the specified object
+
+
+    def duplicateAndApplyDistortions():
+        duplicateObj() #duplicate select object
+
+        global duplicateName
+        cmds.softSelect(softSelectEnabled=False)
+        cmds.select(duplicateName) #select duplicated object
+
+        isolateObject(duplicateName) #isolate duplicate
+
+        applyDistortions(duplicateName) #apply distortions to duplicated object
 
     #apply button clicked
     @one_undo
@@ -251,9 +275,7 @@ def showWindow():
         global vertexList
         vertexList = cmds.ls(vertexIndices, flatten=True)
 
-        applyDistortions()
-
-        #duplicateObj()
+        duplicateAndApplyDistortions()
         
         #distortVerticesInX()
         #distortVerticesInY()
