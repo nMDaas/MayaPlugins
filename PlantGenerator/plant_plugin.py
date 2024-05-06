@@ -183,10 +183,25 @@ def showWindow():
 
         cmds.move(1.0, 0.0, 0.0, relative=True)
 
-    def applyDistort():
-        print("numDistortions: ", numDistortions)
-        print("minDistortion: ", minDistortion)
-        print("maxDistortion: ", maxDistortion)
+    def createDistortion(numVertexIndices):
+        randIndex = (int) (random.random() * numVertexIndices) + 1
+        print("randIndex: ", randIndex)
+
+    def applyDistortions():
+        global numDistortions
+        global minDistortion
+        global maxDistortion
+
+        # get number of vertices
+        numVertexIndices = cmds.polyEvaluate(t.center, vertex=True)
+        print("numVertices: ", numVertexIndices)
+
+        #create numDistortions number of distortions
+        for count in range(numDistortions):
+            createDistortion(numVertexIndices)
+
+        # global vertexList
+        # vertexList = cmds.ls(vertexIndices, flatten=True)
 
     #apply button clicked
     @one_undo
@@ -200,7 +215,7 @@ def showWindow():
         else: # all proper fields have been set
             ui.warnings.setText("")
 
-        applyDistort()
+        applyDistortions()
 
         #duplicateObj()
         
