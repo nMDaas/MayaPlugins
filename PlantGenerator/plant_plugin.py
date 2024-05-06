@@ -246,6 +246,10 @@ def showWindow():
             else:
                 cmds.setAttr(obj + ".visibility", 1)  # Show the specified object
 
+    def showAllObjects():
+        all_objects = cmds.ls(type='transform', long=True)
+        for obj in all_objects:
+            cmds.setAttr(obj + ".visibility", 1)
 
     def duplicateAndApplyDistortions():
         duplicateObj() #duplicate select object
@@ -257,6 +261,14 @@ def showWindow():
         isolateObject(duplicateName) #isolate duplicate
 
         applyDistortions(duplicateName) #apply distortions to duplicated object
+
+        showAllObjects() #show all objects after distortions complete
+
+        cmds.softSelect(softSelectEnabled=False)
+
+        cmds.select(duplicateName) #select duplicate
+
+        #duplicate should be freezed and history should be deleted
 
     #apply button clicked
     @one_undo
