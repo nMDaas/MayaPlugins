@@ -63,7 +63,8 @@ def showWindow():
     ui.setObjectName('Plant_Generator')
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
-    t = Transform()
+    t = Transform() #for leaves (object that will surround t2)
+    t2 = Transform() #for stem/branch (object that will be surrounded)
 
     global X_distort_range
     global Y_distort_range
@@ -86,17 +87,18 @@ def showWindow():
     ZmaxDistortion = 0
 
     #set object to be manupilated
-    def setSelectedObject():
+    def getSelectedObjects():
         #cmds.ls returns the list of objects selected
         selected = cmds.ls(sl=True,long=True) or []
         if not selected:
             print("Please select an object.")
-        elif len(selected) > 1:
-            print("Please select only one object.")
+        elif len(selected) > 2:
+            print("Please select only two objects.")
         else:
             t.center = selected[0]
+            t2.center = selected[1]
             print("t name:",t.center) #t.center returns name of object t
-            ui.center_objs.setText(t.center[1:])
+            print("t2 name:", t2.center)
 
     #manupilates vertices of object selected in X axis
     def distortVerticesInX():
@@ -273,25 +275,14 @@ def showWindow():
     #apply button clicked
     @one_undo
     def apply():
-        setSelectedObject()
-
-        #User error handling
-        if t.center == None:
-            ui.warnings.setText("<font color='red'>Warning:Please set a center object.</font>")
-            return
-        else: # all proper fields have been set
-            ui.warnings.setText("")
+        getSelectedObjects()
 
         #convert mesh vertices to vertex indices
         vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
         global vertexList
         vertexList = cmds.ls(vertexIndices, flatten=True)
 
-        duplicateAndApplyDistortions()
-        
-        #distortVerticesInX()
-        #distortVerticesInY()
-        #distortVerticesInZ()
+        #duplicateAndApplyDistortions()
         
 
 #Close dialog
