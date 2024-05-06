@@ -72,6 +72,19 @@ def showWindow():
     Y_distort_range = 0
     Z_distort_range = 0
 
+    global XminDistortion
+    global XmaxDistortion
+    global YminDistortion
+    global YmaxDistortion
+    global ZminDistortion
+    global ZmaxDistortion
+    XminDistortion = 0
+    XmaxDistortion = 0
+    YminDistortion = 0
+    YmaxDistortion = 0
+    ZminDistortion = 0
+    ZmaxDistortion = 0
+
     #set object to be manupilated
     def setSelectedObject():
         #cmds.ls returns the list of objects selected
@@ -158,13 +171,29 @@ def showWindow():
         global numDistortions
         numDistortions = int(num)
 
-    def set_minDistortion(min):
-        global minDistortion
-        minDistortion = float(min)
+    def set_XminDistortion(min):
+        global XminDistortion
+        XminDistortion = float(min)
 
-    def set_maxDistortion(max):
-        global maxDistortion
-        maxDistortion = float(max)
+    def set_XmaxDistortion(max):
+        global XmaxDistortion
+        XmaxDistortion = float(max)
+
+    def set_YminDistortion(min):
+        global YminDistortion
+        YminDistortion = float(min)
+
+    def set_YmaxDistortion(max):
+        global YmaxDistortion
+        YmaxDistortion = float(max)
+
+    def set_ZminDistortion(min):
+        global ZminDistortion
+        ZminDistortion = float(min)
+
+    def set_ZmaxDistortion(max):
+        global ZmaxDistortion
+        ZmaxDistortion = float(max)
 
     def duplicateObj():
         cmds.duplicate( t.center, rr=True ) #what does rr=True do?
@@ -183,11 +212,15 @@ def showWindow():
         selected_vertices = cmds.ls(selection=True, flatten=True)
         cmds.select(selected_vertices)
 
-        global minDistortion
-        global maxDistortion
-        randDistortionX = (random.random() * maxDistortion) + minDistortion
-        randDistortionY = (random.random() * maxDistortion) + minDistortion
-        randDistortionZ = (random.random() * maxDistortion) + minDistortion
+        global XminDistortion
+        global XmaxDistortion
+        global YminDistortion
+        global YmaxDistortion
+        global ZminDistortion
+        global ZmaxDistortion
+        randDistortionX = (random.random() * XmaxDistortion) + XminDistortion
+        randDistortionY = (random.random() * YmaxDistortion) + YminDistortion
+        randDistortionZ = (random.random() * ZmaxDistortion) + ZminDistortion
 
         cmds.move(randDistortionX, randDistortionY, randDistortionZ, relative=True)
 
@@ -238,8 +271,12 @@ def showWindow():
     ui.Y_input.valueChanged.connect(partial(set_YDistortRange))
     ui.Z_input.valueChanged.connect(partial(set_ZDistortRange))
     ui.count_input.valueChanged.connect(partial(set_numDistortions))
-    ui.X_min_input.valueChanged.connect(partial(set_minDistortion))
-    ui.X_max_input.valueChanged.connect(partial(set_maxDistortion))
+    ui.X_min_input.valueChanged.connect(partial(set_XminDistortion))
+    ui.X_max_input.valueChanged.connect(partial(set_XmaxDistortion))
+    ui.Y_min_input.valueChanged.connect(partial(set_YminDistortion))
+    ui.Y_max_input.valueChanged.connect(partial(set_YmaxDistortion))
+    ui.Z_min_input.valueChanged.connect(partial(set_ZminDistortion))
+    ui.Z_max_input.valueChanged.connect(partial(set_ZmaxDistortion))
      
     # show the QT ui
     ui.show()
