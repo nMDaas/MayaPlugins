@@ -101,75 +101,6 @@ def showWindow():
             print("t name:",t.center) #t.center returns name of object t
             print("t2 name:", t2.center)
 
-    #manupilates vertices of object selected in X axis
-    def distortVerticesInX():
-        global X_distort_range
-        global vertexList
-
-        count = 0
-
-        # Iterate over each vertex and get its position
-        for vertex in vertexList:
-            #get random distort amount
-            randXDistort = random.random() * X_distort_range
-            #get vertex name
-            vertexName = t.center + ".vtx[" + str(count) + "]"
-            #transform vertex in x
-            vertexPosition = cmds.pointPosition(vertex, world=True)
-            cmds.xform(vertexName,worldSpace=True, translation=(vertexPosition[0] + randXDistort,vertexPosition[1],vertexPosition[2]))
-            #increment count
-            count = count + 1
-
-    #manupilates vertices of object selected in Y axis
-    def distortVerticesInY():
-        global Y_distort_range
-        global vertexList
-
-        count = 0
-
-        # Iterate over each vertex and get its position
-        for vertex in vertexList:
-            #get random distort amount
-            randYDistort = random.random() * Y_distort_range
-            #get vertex name
-            vertexName = t.center + ".vtx[" + str(count) + "]"
-            #transform vertex in x
-            vertexPosition = cmds.pointPosition(vertex, world=True)
-            cmds.xform(vertexName,worldSpace=True, translation=(vertexPosition[0],vertexPosition[1] + randYDistort,vertexPosition[2]))
-            #increment count
-            count = count + 1
-
-    #manupilates vertices of object selected in Z axis
-    def distortVerticesInZ():
-        global Z_distort_range
-        global vertexList
-
-        count = 0
-
-        # Iterate over each vertex and get its position
-        for vertex in vertexList:
-            #get random distort amount
-            randZDistort = random.random() * Z_distort_range
-            #get vertex name
-            vertexName = t.center + ".vtx[" + str(count) + "]"
-            #transform vertex in x
-            vertexPosition = cmds.pointPosition(vertex, world=True)
-            cmds.xform(vertexName,worldSpace=True, translation=(vertexPosition[0],vertexPosition[1],vertexPosition[2] + randZDistort))
-            #increment count
-            count = count + 1
-
-    def set_XDistortRange(xRange):
-        global X_distort_range
-        X_distort_range = float(xRange)
-
-    def set_YDistortRange(yRange):
-        global Y_distort_range
-        Y_distort_range = float(yRange)
-
-    def set_ZDistortRange(zRange):
-        global Z_distort_range
-        Z_distort_range = float(zRange)
-
     def set_numDistortions(num):
         global numDistortions
         numDistortions = int(num)
@@ -342,9 +273,6 @@ def showWindow():
     #connect buttons to functions
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
-    ui.X_input.valueChanged.connect(partial(set_XDistortRange))
-    ui.Y_input.valueChanged.connect(partial(set_YDistortRange))
-    ui.Z_input.valueChanged.connect(partial(set_ZDistortRange))
     ui.count_input.valueChanged.connect(partial(set_numDistortions))
     ui.X_min_input.valueChanged.connect(partial(set_XminDistortion))
     ui.X_max_input.valueChanged.connect(partial(set_XmaxDistortion))

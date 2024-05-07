@@ -42,65 +42,6 @@
 
             <layout class="QGridLayout" name="gridLayout">
 
-                <!-- row 0 -->
-
-                <!-- row 1 -->
-                <item row="1" column="0" colspan="2">
-                    <widget class="QFrame">
-                        <property name="frameShape">
-                            <enum>QFrame::HLine</enum>
-                        </property>
-                        <property name="frameShadow">
-                            <enum>QFrame::Raised</enum>
-                        </property>
-                    </widget>
-                </item>
-
-                <!-- row 2 -->
-                <item row="2" column="0">
-                    <widget class="QLabel" name="label_1">
-                        <property name="text">
-                            <string>Distort:</string>
-                        </property>
-                    </widget>
-                </item>
-                <item row="2" column="1">
-                    <layout class="QGridLayout" name="gridLayout_4" >
-                        <item row="0" column="0">
-                            <widget class="QLabel">
-                                <property name="text">
-                                    <string>X: </string>
-                                </property>
-                            </widget>
-                        </item>
-                        <item row="0" column="1">
-                            <widget class="QDoubleSpinBox" name="X_input"/>
-                        </item>
-
-                        <item row="0" column="2">
-                            <widget class="QLabel">
-                                <property name="text">
-                                    <string>Y: </string>
-                                </property>
-                            </widget>
-                        </item>
-                        <item row="0" column="3">
-                            <widget class="QDoubleSpinBox" name="Y_input"/>
-                        </item>
-
-                        <item row="0" column="4">
-                            <widget class="QLabel">
-                                <property name="text">
-                                    <string>Z: </string>
-                                </property>
-                            </widget>
-                        </item>
-                        <item row="0" column="5">
-                            <widget class="QDoubleSpinBox" name="Z_input"/>
-                        </item>
-                    </layout>
-                </item>
-
                 <!-- row 3 -->
                 <item row="3" column="0" colspan="2">
                     <widget class="QFrame">
