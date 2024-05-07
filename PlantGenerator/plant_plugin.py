@@ -278,6 +278,20 @@ def showWindow():
         cmds.select(t.center)
         mel.eval("move -rpr 0 0 0")
 
+    def rotate_around_target(source_object, target_object):
+        # Get the positions of the source and target objects' centers
+        source_center = cmds.xform(source_object, q=True, rp=True, ws=True)
+        target_center = cmds.xform(target_object, q=True, rp=True, ws=True)
+
+        # Calculate the vector from the source object's center to the target object's center
+        vector = [target_center[i] - source_center[i] for i in range(3)]
+        
+        # Calculate the rotation angle in the x-z plane using vector math
+        rotation_y = math.atan2(vector[0], vector[2]) * (180 / math.pi)
+
+        # Rotate the source object around its center in the x-z plane
+        cmds.rotate(0, rotation_y, 0, source_object, r=True, os=True)
+
     def surround():
         # stem/branch should be  be freezed and history should be deleted before this
         #get center of cylinder
@@ -302,6 +316,7 @@ def showWindow():
         cmds.select(t.center)
         moveCommand = "move -rpr " + str(randX) + " " + str(randY) + " " + str(randZ)
         mel.eval(moveCommand)
+        rotate_around_target(t.center, t2.center)
 
     #apply button clicked
     @one_undo
