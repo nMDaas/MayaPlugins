@@ -259,7 +259,7 @@ def showWindow():
         #rotate the source object around its center in the x-z plane
         cmds.rotate(0, rotation_y, 0, source_object, r=True, os=True)
 
-    def surroundMultipleObjs(objs):
+    def surroundWithMultipleObjs(objs):
         for obj in objs:
             surround(obj)
 
@@ -295,7 +295,7 @@ def showWindow():
 
         duplicateAndDistort()
         global duplicates
-        surroundMultipleObjs(duplicates)
+        surroundWithMultipleObjs(duplicates)
 
 #Close dialog
     def close():
