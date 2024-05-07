@@ -273,23 +273,19 @@ def showWindow():
 
         #duplicate should be freezed and history should be deleted
 
-    #pivot of object snaps to (0,0,0) - object doesn't move if its pivot is at 0,0,0
-    def snap_to_origin():
-        cmds.select(t.center)
-        mel.eval("move -rpr 0 0 0")
-
+    # rotates source_object around target_object depending on position of source_object
     def rotate_around_target(source_object, target_object):
-        # Get the positions of the source and target objects' centers
+        #get the positions of the source and target objects' centers
         source_center = cmds.xform(source_object, q=True, rp=True, ws=True)
         target_center = cmds.xform(target_object, q=True, rp=True, ws=True)
 
-        # Calculate the vector from the source object's center to the target object's center
+        #galculate the vector from the source object's center to the target object's center
         vector = [target_center[i] - source_center[i] for i in range(3)]
         
-        # Calculate the rotation angle in the x-z plane using vector math
+        #calculate the rotation angle in the x-z plane using vector math
         rotation_y = math.atan2(vector[0], vector[2]) * (180 / math.pi)
 
-        # Rotate the source object around its center in the x-z plane
+        #rotate the source object around its center in the x-z plane
         cmds.rotate(0, rotation_y, 0, source_object, r=True, os=True)
 
     def surround():
