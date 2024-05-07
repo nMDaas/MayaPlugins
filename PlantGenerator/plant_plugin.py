@@ -15,6 +15,7 @@ from shiboken2 import wrapInstance
 from random import randrange
 import random
 from functools import wraps
+import maya.mel as mel
 
 #keep track of transform settings created by user
 class Transform():
@@ -272,50 +273,35 @@ def showWindow():
 
         #duplicate should be freezed and history should be deleted
 
+    #pivot of object snaps to (0,0,0) - object doesn't move if its pivot is at 0,0,0
+    def snap_to_origin():
+        cmds.select(t.center)
+        mel.eval("move -rpr 0 0 0")
+
     def surround():
         # stem/branch should be  be freezed and history should be deleted before this
+        #get center of cylinder
+        bbox = cmds.exactWorldBoundingBox(t2.center) #returns xmin, ymin, zmin, xmax, ymax, zmax
+        randX = random.uniform(bbox[0],bbox[3]) 
+        randY = random.uniform(bbox[1],bbox[4]) 
+        randZ = random.uniform(bbox[2],bbox[5]) 
 
-        global vertexList2
-        minY = 10000.0
-        maxY = -10000.0
-        centerMin = (0,0,0)
-        centerMax = (0,0,0)
+        print("XMin: ", bbox[0])
+        print("XMax: ", bbox[3])
+        print("YMin: ", bbox[1])
+        print("YMax: ", bbox[4])
+        print("ZMin: ", bbox[2])
+        print("ZMax: ", bbox[5])
+        print("randX: ", randX)
+        print("randY: ", randY)
+        print("randZ: ", randZ)
 
-        #get stem/branch cylinder (0,minY,0) and (0,maxY,0) where 
-        for v in vertexList2:
-            vPos = cmds.pointPosition(v, world=True)
-            if (vPos[0] == 0) & (vPos[2] == 0): #check if x and z coords == 0
-                if float(vPos[1]) < minY:
-                    minY = vPos[1]
-                if float(vPos[1]) > maxY:
-                    maxY = vPos[1]
+        pivot_point = cmds.xform(t.center, q=True, rp=True, ws=True) #find pivot point of t
+        print("pp: ", pivot_point[0], ",", pivot_point[1], ",", pivot_point[2])
 
-        #get vertices to which minY and maxY belong
-        for v in vertexList2:
-            vPos = cmds.pointPosition(v, world=True)
-            if (vPos[0] == 0) & (vPos[2] == 0) & (vPos[1] == minY):
-                centerMin = v #(0,minY,0)
-            if (vPos[0] == 0) & (vPos[2] == 0) & (vPos[1] == maxY):
-                centerMax = v #(0,maxY,0)
-                
-        #get radius of stem/branch
-        for v in vertexList2:
-            vPos = cmds.pointPosition(v, world=True)
-            if vPos[0] != 0 and vPos[2] != 0 and vPos[1] == minY:
-                radius = math.sqrt((vPos[0])**2 + vPos[2]**2)
-                break
-
-        #get random (x,y,z) points on circle at top of cylinder of stem/branch
-        theta = random.uniform(0, 2 * math.pi) #random angle theta between 0 and 2*pi
-        randX = radius * math.cos(theta)
-        randZ = radius * math.sin(theta)
-        vPosMin = cmds.pointPosition(centerMin, world=True)
-        vPosMax = cmds.pointPosition(centerMax, world=True)
-        randY = random.uniform(vPosMin[1],vPosMax[1]) 
-        
-        # Move the object to the new position
         cmds.select(t.center)
-        cmds.move(randX, randY, randZ, t.center, absolute=True)
+        moveCommand = "move -rpr " + str(randX) + " " + str(randY) + " " + str(randZ)
+        mel.eval(moveCommand)
 
     #apply button clicked
     @one_undo
@@ -329,6 +315,10 @@ def showWindow():
         vertexIndices2 = cmds.polyListComponentConversion(t2.center, toVertex=True)
         global vertexList2
         vertexList2 = cmds.ls(vertexIndices2, flatten=True)
+
+        #move_to_origin_and_freeze(t.center)
+
+        #snap_to_origin()
 
         surround()
         #duplicateAndApplyDistortions()
