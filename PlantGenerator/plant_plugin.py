@@ -97,6 +97,9 @@ def showWindow():
     global duplicates 
     duplicates = []
 
+    #objects selected by user (not counting central object)
+    global objs
+
     #set object to be manupilated
     def getSelectedObjects():
         #cmds.ls returns the list of objects selected
@@ -258,6 +261,10 @@ def showWindow():
         #rotate the source object around its center in the x-z plane
         cmds.rotate(0, rotation_y, 0, source_object, r=True, os=True)
 
+    def distributeSelectedObjects():
+        print("distributeSelectedObjects()")
+
+    #t's pivot should be at the corner at which user wants it to connect to t2
     def surroundWithMultipleObjs(objs):
         for obj in objs:
             surround(obj)
@@ -302,6 +309,7 @@ def showWindow():
     #connect buttons to functions
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
+    ui.distribute_button.clicked.connect(partial(distributeSelectedObjects))
     ui.duplicates_input.valueChanged.connect(partial(set_num_duplicates))
     ui.count_input.valueChanged.connect(partial(set_numDistortions))
     ui.X_min_input.valueChanged.connect(partial(set_XminDistortion))
