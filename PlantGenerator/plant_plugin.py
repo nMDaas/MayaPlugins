@@ -94,6 +94,9 @@ def showWindow():
     global numDistortions
     numDistortions = 0
 
+    global duplicates 
+    duplicates = []
+
     #set object to be manupilated
     def getSelectedObjects():
         #cmds.ls returns the list of objects selected
@@ -105,10 +108,8 @@ def showWindow():
         elif len(selected) == 1:
             t.center = selected[0]
         else:
-            t.center = selected[0]
+            t.center = selected[0] #t.center returns name of object t
             t2.center = selected[1]
-            print("t name:",t.center) #t.center returns name of object t
-            print("t2 name:", t2.center)
 
     def set_numDistortions(num):
         global numDistortions
@@ -148,7 +149,6 @@ def showWindow():
 
     def createDistortion(numVertexIndices):
         randIndex = (int) (random.random() * numVertexIndices) + 1
-        print("randIndex: ", randIndex)
 
         global vertexList
         cmds.select(vertexList[randIndex])
@@ -202,9 +202,23 @@ def showWindow():
         for obj in all_objects:
             cmds.setAttr(obj + ".visibility", 1)
 
+    def freeze_and_delete_history(obj):
+        # Select the object
+        cmds.select(obj)
+
+        # Freeze transformations
+        cmds.makeIdentity(apply=True, t=1, r=1, s=1, n=0)
+
+        # Delete history
+        cmds.delete(constructionHistory=True)
+
     def duplicateAndApplyDistortions():
+        global duplicates
         global duplicateName
         duplicateName = duplicateObj() #duplicate select object
+        #freeze_and_delete_history(duplicateName)
+        print("duplicateName: ", duplicateName)
+        duplicates.append(duplicateName)
      
         cmds.softSelect(softSelectEnabled=False)
         cmds.select(duplicateName) #select duplicated object
@@ -223,8 +237,12 @@ def showWindow():
 
     def duplicateAndDistort():
         global num_duplicates
+        global duplicates
+        duplicates.append(t.center)
         for i in range(num_duplicates):
             duplicateAndApplyDistortions()
+
+        print("length: ", len(duplicates))
 
     # rotates source_object around target_object depending on position of source_object
     def rotate_around_target(source_object, target_object):
@@ -241,31 +259,26 @@ def showWindow():
         #rotate the source object around its center in the x-z plane
         cmds.rotate(0, rotation_y, 0, source_object, r=True, os=True)
 
-    def surround():
+    def surroundMultipleObjs(objs):
+        for obj in objs:
+            surround(obj)
+
+    def surround(obj):
         # stem/branch should be  be freezed and history should be deleted before this
+
+        cmds.select(obj)
+        print("obj: ", obj)
+
         #get center of cylinder
         bbox = cmds.exactWorldBoundingBox(t2.center) #returns xmin, ymin, zmin, xmax, ymax, zmax
         randX = random.uniform(bbox[0],bbox[3]) 
         randY = random.uniform(bbox[1],bbox[4]) 
         randZ = random.uniform(bbox[2],bbox[5]) 
 
-        print("XMin: ", bbox[0])
-        print("XMax: ", bbox[3])
-        print("YMin: ", bbox[1])
-        print("YMax: ", bbox[4])
-        print("ZMin: ", bbox[2])
-        print("ZMax: ", bbox[5])
-        print("randX: ", randX)
-        print("randY: ", randY)
-        print("randZ: ", randZ)
-
-        pivot_point = cmds.xform(t.center, q=True, rp=True, ws=True) #find pivot point of t
-        print("pp: ", pivot_point[0], ",", pivot_point[1], ",", pivot_point[2])
-
-        cmds.select(t.center)
+        pivot_point = cmds.xform(obj, q=True, rp=True, ws=True) #find pivot point of t
         moveCommand = "move -rpr " + str(randX) + " " + str(randY) + " " + str(randZ)
         mel.eval(moveCommand)
-        rotate_around_target(t.center, t2.center)
+        rotate_around_target(obj, t2.center)
 
     #apply button clicked
     @one_undo
@@ -281,7 +294,8 @@ def showWindow():
         vertexList2 = cmds.ls(vertexIndices2, flatten=True)
 
         duplicateAndDistort()
-        
+        global duplicates
+        surroundMultipleObjs(duplicates)
 
 #Close dialog
     def close():
