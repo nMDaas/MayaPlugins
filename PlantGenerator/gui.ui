@@ -42,6 +42,18 @@
 
             <layout class="QGridLayout" name="gridLayout">
 
+                <!--row 2 -->
+                <item row="2" column="0">
+                    <widget class="QLabel" name="label_1">
+                        <property name="text">
+                            <string>Number of duplicates:</string>
+                        </property>
+                    </widget>
+                </item>
+                <item row="2" column="1">
+                    <widget class="QSpinBox" name="duplicates_input"/>
+                </item>
+
                 <!-- row 3 -->
                 <item row="3" column="0" colspan="2">
                     <widget class="QFrame">
@@ -136,6 +148,17 @@
                         </item>
                         <item row="3" column="3">
                             <widget class="QDoubleSpinBox" name="Z_max_input"/>
+                        </item>
+
+                        <item row="4" column="0">
+                            <widget class="QLabel">
+                                <property name="text">
+                                    <string>Amt: </string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item row="4" column="1">
+                            <widget class="QDoubleSpinBox" name="distort_amt_input"/>
                         </item>
 
                     </layout>

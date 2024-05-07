@@ -87,6 +87,13 @@ def showWindow():
     ZminDistortion = 0
     ZmaxDistortion = 0
 
+    global num_duplicates
+    num_duplicates = 0
+    global distort_amount
+    distort_amount = 0.0
+    global numDistortions
+    numDistortions = 0
+
     #set object to be manupilated
     def getSelectedObjects():
         #cmds.ls returns the list of objects selected
@@ -95,6 +102,8 @@ def showWindow():
             print("Please select an object.")
         elif len(selected) > 2:
             print("Please select only two objects.")
+        elif len(selected) == 1:
+            t.center = selected[0]
         else:
             t.center = selected[0]
             t2.center = selected[1]
@@ -129,6 +138,14 @@ def showWindow():
         global ZmaxDistortion
         ZmaxDistortion = float(max)
 
+    def set_num_duplicates(num):
+        global num_duplicates
+        num_duplicates = num
+
+    def set_distort_amount(amt):
+        global distort_amount
+        distort_amount = amt
+
     def createDistortion(numVertexIndices):
         randIndex = (int) (random.random() * numVertexIndices) + 1
         print("randIndex: ", randIndex)
@@ -137,7 +154,7 @@ def showWindow():
         cmds.select(vertexList[randIndex])
 
         cmds.softSelect(softSelectEnabled=True)  # Enable soft selection
-        cmds.softSelect(sse=1,ssd=2.0,ssc='0,1,2,1,0,2',ssf=2)
+        cmds.softSelect(sse=1,ssd=float(distort_amount),ssc='0,1,2,1,0,2',ssf=float(distort_amount))
 
         # Get the selected vertices and their surrounding vertices
         selected_vertices = cmds.ls(selection=True, flatten=True)
@@ -168,9 +185,9 @@ def showWindow():
     def duplicateObj():
         global duplicateName
         original_object = t.center  # Assuming "t.center" is the name of your original object
-        duplicateName = original_object + "copy"
         #cmds.duplicate(original_object)
-        cmds.duplicate( t.center, rr=False, name=duplicateName)
+        duplicate_name_list = cmds.duplicate( t.center, rr=False)
+        return duplicate_name_list[0]
 
     def isolateObject(objName):
         all_objects = cmds.ls(type='transform', long=True)
@@ -186,16 +203,16 @@ def showWindow():
             cmds.setAttr(obj + ".visibility", 1)
 
     def duplicateAndApplyDistortions():
-        duplicateObj() #duplicate select object
-
         global duplicateName
+        duplicateName = duplicateObj() #duplicate select object
+     
         cmds.softSelect(softSelectEnabled=False)
         cmds.select(duplicateName) #select duplicated object
 
         isolateObject(duplicateName) #isolate duplicate
 
         applyDistortions(duplicateName) #apply distortions to duplicated object
-
+        
         showAllObjects() #show all objects after distortions complete
 
         cmds.softSelect(softSelectEnabled=False)
@@ -203,6 +220,11 @@ def showWindow():
         cmds.select(duplicateName) #select duplicate
 
         #duplicate should be freezed and history should be deleted
+
+    def duplicateAndDistort():
+        global num_duplicates
+        for i in range(num_duplicates):
+            duplicateAndApplyDistortions()
 
     # rotates source_object around target_object depending on position of source_object
     def rotate_around_target(source_object, target_object):
@@ -258,12 +280,7 @@ def showWindow():
         global vertexList2
         vertexList2 = cmds.ls(vertexIndices2, flatten=True)
 
-        #move_to_origin_and_freeze(t.center)
-
-        #snap_to_origin()
-
-        surround()
-        #duplicateAndApplyDistortions()
+        duplicateAndDistort()
         
 
 #Close dialog
@@ -273,6 +290,7 @@ def showWindow():
     #connect buttons to functions
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
+    ui.duplicates_input.valueChanged.connect(partial(set_num_duplicates))
     ui.count_input.valueChanged.connect(partial(set_numDistortions))
     ui.X_min_input.valueChanged.connect(partial(set_XminDistortion))
     ui.X_max_input.valueChanged.connect(partial(set_XmaxDistortion))
@@ -280,6 +298,7 @@ def showWindow():
     ui.Y_max_input.valueChanged.connect(partial(set_YmaxDistortion))
     ui.Z_min_input.valueChanged.connect(partial(set_ZminDistortion))
     ui.Z_max_input.valueChanged.connect(partial(set_ZmaxDistortion))
+    ui.distort_amt_input.valueChanged.connect(partial(set_distort_amount))
      
     # show the QT ui
     ui.show()
