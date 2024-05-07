@@ -233,8 +233,7 @@ def showWindow():
 
         cmds.select(duplicateName) #select duplicate
 
-        #duplicate should be freezed and history should be deleted
-
+    #object t and t2 should be frozen and their history should be deleted before this
     def duplicateAndDistort():
         global num_duplicates
         global duplicates
@@ -263,9 +262,8 @@ def showWindow():
         for obj in objs:
             surround(obj)
 
+    #objects do not need to frozen and deleted history for this method
     def surround(obj):
-        # stem/branch should be  be freezed and history should be deleted before this
-
         cmds.select(obj)
         print("obj: ", obj)
 
