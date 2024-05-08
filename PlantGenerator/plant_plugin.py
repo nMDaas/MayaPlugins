@@ -104,6 +104,9 @@ def showWindow():
     distribute_checkbox = False
     dd_checkbox = False
 
+    global objsToDistribute
+    objsToDistribute = []
+
     #set object to be manupilated
     def getSelectedObjects():
         #cmds.ls returns the list of objects selected
@@ -111,7 +114,11 @@ def showWindow():
         if not selected:
             print("Please select an object.")
         elif len(selected) > 2:
-            print("Please select only two objects.")
+            for i in range(len(selected) - 1):
+                print("i: ", selected[i])
+                objsToDistribute.append(selected[i])
+            t2.center = selected[len(selected) - 1]
+            print("t2: ", t2.center)
         elif len(selected) == 1:
             t.center = selected[0]
         else:
@@ -318,12 +325,15 @@ def showWindow():
         global distribute_checkbox
         global dd_checkbox
 
+        global duplicates
+
         if (distort_checkbox):
-            print("Distort")
+            duplicateAndDistort()
         elif (distribute_checkbox):
-            print("Distribute")
+            surroundWithMultipleObjs(objsToDistribute)
         else:
-            print("Both")
+            duplicateAndDistort()
+            surroundWithMultipleObjs(duplicates)
 
         """
         duplicateAndDistort()
