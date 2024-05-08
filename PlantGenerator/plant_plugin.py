@@ -284,9 +284,6 @@ def showWindow():
         #rotate the source object around its center in the x-z plane
         cmds.rotate(0, rotation_y, 0, source_object, r=True, os=True)
 
-    def distributeSelectedObjects():
-        print("distributeSelectedObjects()")
-
     #t's pivot should be at the corner at which user wants it to connect to t2
     def surroundWithMultipleObjs(objs):
         for obj in objs:
@@ -348,7 +345,6 @@ def showWindow():
     #connect buttons to functions
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
-    ui.distribute_button.clicked.connect(partial(distributeSelectedObjects))
 
     ui.distort_checkbox.stateChanged.connect(partial(set_distort_checkbox))
     ui.distribute_checkbox.stateChanged.connect(partial(set_distribute_checkbox))
