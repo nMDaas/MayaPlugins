@@ -173,6 +173,14 @@ def showWindow():
         global dd_checkbox
         dd_checkbox = ui.dd_checkbox.checkState()
 
+    def set_minSize(size):
+        global minSize
+        minSize = size
+
+    def set_maxSize(size):
+        global maxSize
+        maxSize = size
+
     def createDistortion(numVertexIndices):
         randIndex = (int) (random.random() * numVertexIndices) + 1
 
@@ -358,6 +366,8 @@ def showWindow():
     ui.Y_max_input.valueChanged.connect(partial(set_YmaxDistortion))
     ui.Z_min_input.valueChanged.connect(partial(set_ZminDistortion))
     ui.Z_max_input.valueChanged.connect(partial(set_ZmaxDistortion))
+    ui.size_min_input.valueChanged.connect(partial(set_minSize))
+    ui.size_max_input.valueChanged.connect(partial(set_maxSize))
     ui.distort_amt_input.valueChanged.connect(partial(set_distort_amount))
      
     # show the QT ui
