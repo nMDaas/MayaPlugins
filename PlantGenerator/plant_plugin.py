@@ -97,8 +97,12 @@ def showWindow():
     global duplicates 
     duplicates = []
 
-    #objects selected by user (not counting central object)
-    global objs
+    global distort_checkbox
+    global distribute_checkbox
+    global dd_checkbox
+    distort_checkbox = False
+    distribute_checkbox = False
+    dd_checkbox = False
 
     #set object to be manupilated
     def getSelectedObjects():
@@ -149,6 +153,18 @@ def showWindow():
     def set_distort_amount(amt):
         global distort_amount
         distort_amount = amt
+
+    def set_distort_checkbox(c):
+        global distort_checkbox
+        distort_checkbox = ui.distort_checkbox.checkState()
+
+    def set_distribute_checkbox(c):
+        global distribute_checkbox
+        distribute_checkbox = ui.distribute_checkbox.checkState()
+
+    def set_dd_checkbox(c):
+        global dd_checkbox
+        dd_checkbox = ui.dd_checkbox.checkState()
 
     def createDistortion(numVertexIndices):
         randIndex = (int) (random.random() * numVertexIndices) + 1
@@ -298,9 +314,22 @@ def showWindow():
         global vertexList2
         vertexList2 = cmds.ls(vertexIndices2, flatten=True)
 
+        global distort_checkbox
+        global distribute_checkbox
+        global dd_checkbox
+
+        if (distort_checkbox):
+            print("Distort")
+        elif (distribute_checkbox):
+            print("Distribute")
+        else:
+            print("Both")
+
+        """
         duplicateAndDistort()
         global duplicates
         surroundWithMultipleObjs(duplicates)
+        """
 
 #Close dialog
     def close():
@@ -310,6 +339,11 @@ def showWindow():
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
     ui.distribute_button.clicked.connect(partial(distributeSelectedObjects))
+
+    ui.distort_checkbox.stateChanged.connect(partial(set_distort_checkbox))
+    ui.distribute_checkbox.stateChanged.connect(partial(set_distribute_checkbox))
+    ui.dd_checkbox.stateChanged.connect(partial(set_dd_checkbox))
+
     ui.duplicates_input.valueChanged.connect(partial(set_num_duplicates))
     ui.count_input.valueChanged.connect(partial(set_numDistortions))
     ui.X_min_input.valueChanged.connect(partial(set_XminDistortion))
