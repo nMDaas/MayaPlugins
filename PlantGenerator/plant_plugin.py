@@ -107,6 +107,19 @@ def showWindow():
     global objsToDistribute
     objsToDistribute = []
 
+    global x_min_scale
+    global y_min_scale
+    global z_min_scale
+    global x_max_scale
+    global y_max_scale
+    global z_max_scale
+    x_min_scale = 0.0
+    y_min_scale = 0.0
+    z_min_scale = 0.0
+    x_max_scale = 0.0
+    y_max_scale = 0.0
+    z_max_scale = 0.0
+
     #set object to be manupilated
     def getSelectedObjects():
         #cmds.ls returns the list of objects selected
@@ -172,6 +185,30 @@ def showWindow():
     def set_dd_checkbox(c):
         global dd_checkbox
         dd_checkbox = ui.dd_checkbox.checkState()
+
+    def set_x_min_scale(scale):
+        global x_min_scale
+        x_min_scale = scale
+
+    def set_y_min_scale(scale):
+        global y_min_scale
+        y_min_scale = scale
+
+    def set_z_min_scale(scale):
+        global z_min_scale
+        z_min_scale = scale
+
+    def set_x_max_scale(scale):
+        global x_max_scale
+        x_max_scale = scale
+
+    def set_y_max_scale(scale):
+        global y_max_scale
+        y_max_scale = scale
+
+    def set_z_max_scale(scale):
+        global z_max_scale
+        z_max_scale = scale
 
     def createDistortion(numVertexIndices):
         randIndex = (int) (random.random() * numVertexIndices) + 1
@@ -359,6 +396,12 @@ def showWindow():
     ui.Z_min_input.valueChanged.connect(partial(set_ZminDistortion))
     ui.Z_max_input.valueChanged.connect(partial(set_ZmaxDistortion))
     ui.distort_amt_input.valueChanged.connect(partial(set_distort_amount))
+    ui.X_min_scale.valueChanged.connect(partial(set_x_min_scale))
+    ui.Y_min_scale.valueChanged.connect(partial(set_y_min_scale))
+    ui.Z_min_scale.valueChanged.connect(partial(set_z_min_scale))
+    ui.X_max_scale.valueChanged.connect(partial(set_x_max_scale))
+    ui.Y_max_scale.valueChanged.connect(partial(set_y_max_scale))
+    ui.Z_max_scale.valueChanged.connect(partial(set_z_max_scale))
      
     # show the QT ui
     ui.show()
