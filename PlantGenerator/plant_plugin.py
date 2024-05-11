@@ -89,8 +89,6 @@ def showWindow():
 
     global num_duplicates
     num_duplicates = 0
-    global distort_amount
-    distort_amount = 0.0
     global numDistortions
     numDistortions = 0
 
@@ -107,18 +105,28 @@ def showWindow():
     global objsToDistribute
     objsToDistribute = []
 
+    ui.distort_amt_input.setValue(0.2)
+    global distort_amount
+    distort_amount = 0.2
+
     global x_min_scale
     global y_min_scale
     global z_min_scale
     global x_max_scale
     global y_max_scale
     global z_max_scale
-    x_min_scale = 0.0
-    y_min_scale = 0.0
-    z_min_scale = 0.0
-    x_max_scale = 0.0
-    y_max_scale = 0.0
-    z_max_scale = 0.0
+    x_min_scale = 0.7
+    y_min_scale = 0.7
+    z_min_scale = 0.7
+    x_max_scale = 1.0
+    y_max_scale = 1.0
+    z_max_scale = 1.0
+    ui.X_min_scale.setValue(0.7)
+    ui.Y_min_scale.setValue(0.7)
+    ui.Z_min_scale.setValue(0.7)
+    ui.X_max_scale.setValue(1.0)
+    ui.Y_max_scale.setValue(1.0)
+    ui.Z_max_scale.setValue(1.0)
 
     #set object to be manupilated
     def getSelectedObjects():
@@ -229,9 +237,9 @@ def showWindow():
         global YmaxDistortion
         global ZminDistortion
         global ZmaxDistortion
-        randDistortionX = (random.random() * XmaxDistortion) + XminDistortion
-        randDistortionY = (random.random() * YmaxDistortion) + YminDistortion
-        randDistortionZ = (random.random() * ZmaxDistortion) + ZminDistortion
+        randDistortionX = random.uniform(XminDistortion,XmaxDistortion)
+        randDistortionY = random.uniform(YminDistortion,YmaxDistortion)
+        randDistortionZ = random.uniform(ZminDistortion,ZmaxDistortion)
 
         cmds.move(randDistortionX, randDistortionY, randDistortionZ, relative=True)
 
@@ -295,6 +303,30 @@ def showWindow():
         cmds.softSelect(softSelectEnabled=False)
 
         cmds.select(duplicateName) #select duplicate
+        
+        global x_min_scale
+        global y_min_scale
+        global z_min_scale
+        global x_max_scale
+        global y_max_scale
+        global z_max_scale
+
+        randXScale = random.uniform(x_min_scale,x_max_scale) 
+        randYScale = random.uniform(y_min_scale,y_max_scale) 
+        randZScale = random.uniform(z_min_scale,z_max_scale) 
+
+        print("x_max_scale", x_max_scale)
+        print("y_max_scale", y_max_scale)
+        print("z_max_scale", z_max_scale)
+        print("x_min_scale", x_min_scale)
+        print("y_max_scale", y_max_scale)
+        print("z_min_scale", z_min_scale)
+        print("randXScale", randXScale)
+        print("randYScale", randYScale)
+        print("randZScale", randZScale)
+
+        cmds.scale(randXScale,randZScale,randZScale)
+        
 
     #object t and t2 should be frozen and their history should be deleted before this
     def duplicateAndDistort():
