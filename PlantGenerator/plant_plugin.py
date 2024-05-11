@@ -333,8 +333,23 @@ def showWindow():
         global num_duplicates
         global duplicates
         duplicates.append(t.center)
-        for i in range(num_duplicates):
-            duplicateAndApplyDistortions()
+
+        if (len(duplicates) == 1):
+            #do NOT create duplicates - distort object selected
+            cmds.softSelect(softSelectEnabled=False)
+            cmds.select(t.center) #select duplicated object
+
+            isolateObject(t.center) #isolate duplicate
+
+            applyDistortions(t.center) #apply distortions to duplicated object
+            
+            showAllObjects() #show all objects after distortions complete
+
+            cmds.softSelect(softSelectEnabled=False)
+        else:
+            #create duplicates and distort duplicates
+            for i in range(num_duplicates):
+                duplicateAndApplyDistortions()
 
         print("length: ", len(duplicates))
 
