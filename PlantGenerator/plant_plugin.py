@@ -394,11 +394,39 @@ def showWindow():
     # assuming that the object's pivot is at least slightly closer to one side 
     def getFarthestVerticesFromPivot(obj):
         getPivotCommand = "getAttr " + obj + ".scalePivot"
-        commResult = mel.eval(getPivotCommand) #pivot = (commResult[0],commResult[1],commResult[2])
-        print("Result: ", commResult)
-        print(commResult[0])
-        print(commResult[1])
-        print(commResult[2])
+        pivotResult = mel.eval(getPivotCommand) #pivot = (commResult[0],commResult[1],commResult[2])
+
+        #convert mesh vertices to vertex indices
+        objVertexIndices = cmds.polyListComponentConversion(obj, toVertex=True)
+        objVertexList = cmds.ls(objVertexIndices, flatten=True)
+
+        #first need to find farthest vertex away from pivot
+        vIndex = 0
+        maxDistance = -1000.0
+        maxX = -1000.0
+        maxY = -1000.0
+        maxZ = -1000.0
+        count = 0
+        for v in objVertexList:
+            vPos =  cmds.pointPosition(v, world=True)
+            dist = math.sqrt(((vPos[0]-pivotResult[0])**2)+((vPos[1]-pivotResult[1])**2)+((vPos[2]-pivotResult[2])**2))
+            if (dist > maxDistance):
+                maxDistance = dist
+                maxX = (vPos[0]-pivotResult[0])**2
+                maxY = (vPos[1]-pivotResult[1])**2
+                maxZ = (vPos[2]-pivotResult[2])**2
+                vIndex = count
+            count = count + 1
+
+        print("MaxX: ", maxX)
+        print("MaxY: ", maxY)
+        print("MaxZ: ", maxZ)
+        print("Index: ", vIndex)
+
+        #for now, selecting the vertex with the farthest distance
+        vertexToSel = obj + ".vtx[" + str(vIndex) + "]"
+        cmds.select(vertexToSel)
+        
 
     #apply button clicked
     @one_undo
