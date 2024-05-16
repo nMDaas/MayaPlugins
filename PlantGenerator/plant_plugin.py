@@ -443,23 +443,31 @@ def showWindow():
             dist = math.sqrt(((vP[0]-pivotResult[0])**2)+((vP[1]-pivotResult[1])**2)+((vP[2]-pivotResult[2])**2))
             if (abs(maxDist - dist) <= 0.02):
                 print("surrounding: ", count)
-                surroundingVertices.append(count)
+                surroundingVertices.append(v)
             count = count + 1
+
+        return surroundingVertices
 
     def snapToVertices(vertices):
         randIndex = (int) (random.random() * len(vertices))
         randVertexPos = cmds.pointPosition(vertices[randIndex], world=True)
 
+        cmds.select(t.center)
         moveCommand = "move -rpr " + str(randVertexPos[0]) + " " + str(randVertexPos[1]) + " " + str(randVertexPos[2])
         mel.eval(moveCommand)
+
+    def distributeInRing():
+        farthestVIndex = getFarthestVerticesFromPivot(t2.center)
+        surroundingVertices = getVerticesSurroundingVertex(t2.center, farthestVIndex)
+        snapToVertices(surroundingVertices)
+        rotate_around_target(t.center, t2.center)
 
     #apply button clicked
     @one_undo
     def apply():
         getSelectedObjects()
 
-        farthestVIndex = getFarthestVerticesFromPivot(t.center)
-        getVerticesInRingWith(t.center,farthestVIndex)
+        distributeInRing()
 
         """
         #convert mesh vertices to vertex indices
