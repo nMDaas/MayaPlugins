@@ -16,6 +16,7 @@ from random import randrange
 import random
 from functools import wraps
 import maya.mel as mel
+import re
 
 #keep track of transform settings created by user
 class Transform():
@@ -389,11 +390,24 @@ def showWindow():
         mel.eval(moveCommand)
         rotate_around_target(obj, t2.center)
 
+    # this gets top most vertices and tip of object 
+    # assuming that the object's pivot is at least slightly closer to one side 
+    def getFarthestVerticesFromPivot(obj):
+        getPivotCommand = "getAttr " + obj + ".scalePivot"
+        commResult = mel.eval(getPivotCommand) #pivot = (commResult[0],commResult[1],commResult[2])
+        print("Result: ", commResult)
+        print(commResult[0])
+        print(commResult[1])
+        print(commResult[2])
+
     #apply button clicked
     @one_undo
     def apply():
         getSelectedObjects()
 
+        getFarthestVerticesFromPivot(t.center)
+
+        """
         #convert mesh vertices to vertex indices
         vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
         global vertexList
@@ -415,11 +429,6 @@ def showWindow():
         else:
             duplicateAndDistort()
             surroundWithMultipleObjs(duplicates)
-
-        """
-        duplicateAndDistort()
-        global duplicates
-        surroundWithMultipleObjs(duplicates)
         """
 
 #Close dialog
