@@ -2,6 +2,7 @@
 
 # Instructions: to run, navigate to execute_tool.py and run the file
 
+#imports
 from PySide2.QtCore import * 
 from PySide2.QtGui import *
 from PySide2.QtUiTools import *
@@ -147,6 +148,8 @@ def showWindow():
             t.center = selected[0] #t.center returns name of object t
             t2.center = selected[1]
 
+    #set variable methods
+
     def set_numDistortions(num):
         global numDistortions
         numDistortions = int(num)
@@ -219,6 +222,42 @@ def showWindow():
         global z_max_scale
         z_max_scale = scale
 
+    #general useful methods
+
+    #duplicates t.center and returns the naem of the duplicate
+    def duplicateObj():
+        global duplicateName
+        original_object = t.center  # Assuming "t.center" is the name of your original object
+        #cmds.duplicate(original_object)
+        duplicate_name_list = cmds.duplicate( t.center, rr=False)
+        return duplicate_name_list[0]
+
+    #isolates given object 
+    def isolateObject(objName):
+        all_objects = cmds.ls(type='transform', long=True)
+        for obj in all_objects:
+            if obj != objName:
+                cmds.setAttr(obj + ".visibility", 0)  # Hide the object
+            else:
+                cmds.setAttr(obj + ".visibility", 1)  # Show the specified object
+
+    def showAllObjects():
+        all_objects = cmds.ls(type='transform', long=True)
+        for obj in all_objects:
+            cmds.setAttr(obj + ".visibility", 1)
+
+    def freeze_and_delete_history(obj):
+        # Select the object
+        cmds.select(obj)
+
+        # Freeze transformations
+        cmds.makeIdentity(apply=True, t=1, r=1, s=1, n=0)
+
+        # Delete history
+        cmds.delete(constructionHistory=True)
+
+    # DISTORT FUNCTIONS
+
     def createDistortion(numVertexIndices):
         randIndex = (int) (random.random() * numVertexIndices) + 1
 
@@ -244,7 +283,7 @@ def showWindow():
 
         cmds.move(randDistortionX, randDistortionY, randDistortionZ, relative=True)
 
-    def applyDistortions(duplicateName):
+    def applyDistortionsToObj(duplicateName):
         global numDistortions
         
         # get number of vertices
@@ -254,37 +293,7 @@ def showWindow():
         for count in range(numDistortions):
             createDistortion(numVertexIndices)
 
-    def duplicateObj():
-        global duplicateName
-        original_object = t.center  # Assuming "t.center" is the name of your original object
-        #cmds.duplicate(original_object)
-        duplicate_name_list = cmds.duplicate( t.center, rr=False)
-        return duplicate_name_list[0]
-
-    def isolateObject(objName):
-        all_objects = cmds.ls(type='transform', long=True)
-        for obj in all_objects:
-            if obj != objName:
-                cmds.setAttr(obj + ".visibility", 0)  # Hide the object
-            else:
-                cmds.setAttr(obj + ".visibility", 1)  # Show the specified object
-
-    def showAllObjects():
-        all_objects = cmds.ls(type='transform', long=True)
-        for obj in all_objects:
-            cmds.setAttr(obj + ".visibility", 1)
-
-    def freeze_and_delete_history(obj):
-        # Select the object
-        cmds.select(obj)
-
-        # Freeze transformations
-        cmds.makeIdentity(apply=True, t=1, r=1, s=1, n=0)
-
-        # Delete history
-        cmds.delete(constructionHistory=True)
-
-    def duplicateAndApplyDistortions():
+    def duplicateObjAndApplyDistortions():
         global duplicates
         global duplicateName
         duplicateName = duplicateObj() #duplicate select object
@@ -297,7 +306,7 @@ def showWindow():
 
         isolateObject(duplicateName) #isolate duplicate
 
-        applyDistortions(duplicateName) #apply distortions to duplicated object
+        applyDistortionsToObj(duplicateName) #apply distortions to duplicated object
         
         showAllObjects() #show all objects after distortions complete
 
@@ -316,19 +325,8 @@ def showWindow():
         randYScale = random.uniform(y_min_scale,y_max_scale) 
         randZScale = random.uniform(z_min_scale,z_max_scale) 
 
-        print("x_max_scale", x_max_scale)
-        print("y_max_scale", y_max_scale)
-        print("z_max_scale", z_max_scale)
-        print("x_min_scale", x_min_scale)
-        print("y_max_scale", y_max_scale)
-        print("z_min_scale", z_min_scale)
-        print("randXScale", randXScale)
-        print("randYScale", randYScale)
-        print("randZScale", randZScale)
-
         cmds.scale(randXScale,randZScale,randZScale)
         
-
     #object t and t2 should be frozen and their history should be deleted before this
     def duplicateAndDistort():
         global num_duplicates
@@ -342,7 +340,7 @@ def showWindow():
 
             isolateObject(t.center) #isolate duplicate
 
-            applyDistortions(t.center) #apply distortions to duplicated object
+            applyDistortionsToObj(t.center) #apply distortions to duplicated object
             
             showAllObjects() #show all objects after distortions complete
 
@@ -350,9 +348,11 @@ def showWindow():
         else:
             #create duplicates and distort duplicates
             for i in range(num_duplicates):
-                duplicateAndApplyDistortions()
+                duplicateObjAndApplyDistortions()
 
         print("length: ", len(duplicates))
+
+    # DISTRIBUTE FUNCTIONS
 
     # rotates source_object around target_object depending on position of source_object
     def rotate_around_target(source_object, target_object):
@@ -369,13 +369,9 @@ def showWindow():
         #rotate the source object around its center in the x-z plane
         cmds.rotate(0, rotation_y, 0, source_object, r=True, os=True)
 
-    #t's pivot should be at the corner at which user wants it to connect to t2
-    def surroundWithMultipleObjs(objs):
-        for obj in objs:
-            surround(obj)
-
+    #to distribute an object around t2
     #objects do not need to frozen and deleted history for this method
-    def surround(obj):
+    def distribute(obj):
         cmds.select(obj)
         print("obj: ", obj)
 
@@ -389,6 +385,12 @@ def showWindow():
         moveCommand = "move -rpr " + str(randX) + " " + str(randY) + " " + str(randZ)
         mel.eval(moveCommand)
         rotate_around_target(obj, t2.center)
+
+    #to distribute all objects in objs[] around t2
+    #t's pivot should be at the corner at which user wants it to connect to t2
+    def distributeObjs(objs):
+        for obj in objs:
+            distribute(obj)
 
     # this gets top most vertices and tip of object 
     # assuming that the object's pivot is at least slightly closer to one side 
@@ -487,10 +489,10 @@ def showWindow():
         if (distort_checkbox):
             duplicateAndDistort()
         elif (distribute_checkbox):
-            surroundWithMultipleObjs(objsToDistribute)
+            distributeObjs(objsToDistribute)
         else:
             duplicateAndDistort()
-            surroundWithMultipleObjs(duplicates)
+            distributeObjs(duplicates)
         """
 
 #Close dialog
