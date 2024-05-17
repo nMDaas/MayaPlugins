@@ -316,7 +316,7 @@ def showWindow():
             vP =  cmds.pointPosition(v, world=True)
             dist = math.sqrt(((vP[0]-pivotResult[0])**2)+((vP[1]-pivotResult[1])**2)+((vP[2]-pivotResult[2])**2))
             if (abs(maxDist - dist) <= 0.02):
-                print("surrounding: ", count)
+                #print("surrounding: ", count)
                 surroundingVertices.append(v)
             count = count + 1
 
@@ -327,7 +327,7 @@ def showWindow():
         randIndex = (int) (random.random() * len(vertices))
         randVertexPos = cmds.pointPosition(vertices[randIndex], world=True)
 
-        cmds.select(t.center)
+        cmds.select(objToSnap)
         moveCommand = "move -rpr " + str(randVertexPos[0]) + " " + str(randVertexPos[1]) + " " + str(randVertexPos[2])
         mel.eval(moveCommand)
 
@@ -454,7 +454,7 @@ def showWindow():
 
         #either distribute at top of cylinder or around but the former has a lower chance than latter
         randLoc = random.random()
-        if (randLoc <= 0.2):
+        if (randLoc <= 0.01):
             #distribute at top of cylinder
             distributeInRing(obj, t2.center)
         else:
@@ -473,8 +473,15 @@ def showWindow():
     #to distribute all objects in objs[] around t2
     #t's pivot should be at the corner at which user wants it to connect to t2
     def distributeObjs(objs):
-        for obj in objs:
-            distribute(obj)
+        global distribute_top_checkbox
+
+        if (distribute_top_checkbox):
+            for obj in objs:
+                print("new obj: ", obj)
+                distributeInRing(obj,t2.center)
+        else:
+            for obj in objs:
+                distribute(obj)
 
     def distributeInRing(obj,obj2):
         farthestVIndex = getFarthestVerticesFromPivot(obj2)
