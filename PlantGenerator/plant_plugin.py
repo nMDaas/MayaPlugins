@@ -103,10 +103,12 @@ def showWindow():
     global distribute_checkbox
     global dd_checkbox
     global distribute_top_checkbox
+    global tilt_checkbox
     distort_checkbox = False
     distribute_checkbox = False
     dd_checkbox = False
     distribute_top_checkbox = False
+    tilt_checkbox = False
 
     global objsToDistribute
     objsToDistribute = []
@@ -121,12 +123,18 @@ def showWindow():
     global x_max_scale
     global y_max_scale
     global z_max_scale
+    global x_tilt
+    global y_tilt
+    global z_tilt
     x_min_scale = 0.7
     y_min_scale = 0.7
     z_min_scale = 0.7
     x_max_scale = 1.0
     y_max_scale = 1.0
     z_max_scale = 1.0
+    x_tilt = 0.0
+    y_tilt = 0.0
+    z_tilt = 0.0
     ui.X_min_scale.setValue(0.7)
     ui.Y_min_scale.setValue(0.7)
     ui.Z_min_scale.setValue(0.7)
@@ -202,6 +210,10 @@ def showWindow():
         global dd_checkbox
         dd_checkbox = ui.dd_checkbox.checkState()
 
+    def set_tilt_checkbox(c):
+        global tilt_checkbox
+        tilt_checkbox = ui.tilt_checkbox.checkState()
+
     def set_x_min_scale(scale):
         global x_min_scale
         x_min_scale = scale
@@ -225,6 +237,18 @@ def showWindow():
     def set_z_max_scale(scale):
         global z_max_scale
         z_max_scale = scale
+
+    def set_x_tilt(tilt):
+        global x_tilt
+        x_tilt = tilt
+
+    def set_y_tilt(tilt):
+        global y_tilt
+        y_tilt = tilt
+
+    def set_z_tilt(tilt):
+        global z_tilt
+        z_tilt = tilt
 
     def set_distribute_top_checkbox(c):
         global distribute_top_checkbox
@@ -491,7 +515,9 @@ def showWindow():
         snapToVertices(obj, surroundingVertices)
         rotate_around_target(obj, obj2)
 
-    def tilt(obj):
+    # TILT METHODS
+
+    def tiltObj(obj, xRot, yRot, zRot):
         farthestVIndex = getFarthestVerticesFromPivot(obj)
 
         #convert mesh vertices to vertex indices
@@ -505,16 +531,25 @@ def showWindow():
         # Get the selected vertices and their surrounding vertices
         selected_vertices = cmds.ls(selection=True, flatten=True)
         cmds.select(selected_vertices)
-        cmds.rotate( 0, 0, '30deg', os=True)
+        
+        xRotString = str(xRot) + 'deg'
+        yRotString = str(yRot) + 'deg'
+        zRotString = str(zRot) + 'deg'
+        cmds.rotate( xRotString, yRotString, zRotString, os=True)
+        cmds.softSelect(softSelectEnabled=False)
+
+    def tiltObjs(objsToDistribute):
+        global x_tilt
+        global y_tilt
+        global z_tilt
+        for obj in objsToDistribute:
+            tiltObj(obj, x_tilt, y_tilt, z_tilt)
+        
 
     #apply button clicked
     @one_undo
     def apply():
         getSelectedObjects()
-
-        tilt(t.center)
-
-        """
 
         #convert mesh vertices to vertex indices
         vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
@@ -534,10 +569,12 @@ def showWindow():
             duplicateAndDistort()
         elif (distribute_checkbox):
             distributeObjs(objsToDistribute)
-        else:
+        elif (dd_checkbox):
             duplicateAndDistort()
             distributeObjs(duplicates)
-        """
+        else:
+            tiltObjs(objsToDistribute)
+
 
 #Close dialog
     def close():
@@ -550,6 +587,7 @@ def showWindow():
     ui.distort_checkbox.stateChanged.connect(partial(set_distort_checkbox))
     ui.distribute_checkbox.stateChanged.connect(partial(set_distribute_checkbox))
     ui.dd_checkbox.stateChanged.connect(partial(set_dd_checkbox))
+    ui.tilt_checkbox.stateChanged.connect(partial(set_tilt_checkbox))
     ui.distribute_top_checkbox.stateChanged.connect(partial(set_distribute_top_checkbox))
 
     ui.duplicates_input.valueChanged.connect(partial(set_num_duplicates))
@@ -567,6 +605,9 @@ def showWindow():
     ui.X_max_scale.valueChanged.connect(partial(set_x_max_scale))
     ui.Y_max_scale.valueChanged.connect(partial(set_y_max_scale))
     ui.Z_max_scale.valueChanged.connect(partial(set_z_max_scale))
+    ui.X_tilt.valueChanged.connect(partial(set_x_tilt))
+    ui.Y_tilt.valueChanged.connect(partial(set_y_tilt))
+    ui.Z_tilt.valueChanged.connect(partial(set_z_tilt))
      
     # show the QT ui
     ui.show()
