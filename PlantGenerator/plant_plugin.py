@@ -491,14 +491,30 @@ def showWindow():
         snapToVertices(obj, surroundingVertices)
         rotate_around_target(obj, obj2)
 
+    def tilt(obj):
+        farthestVIndex = getFarthestVerticesFromPivot(obj)
+
+        #convert mesh vertices to vertex indices
+        objIndices = cmds.polyListComponentConversion(obj, toVertex=True)
+        objVertexList = cmds.ls(objIndices, flatten=True)
+        cmds.select(objVertexList[farthestVIndex])
+
+        cmds.softSelect(softSelectEnabled=True)  # Enable soft selection
+        cmds.softSelect(sse=1,ssd=float(0.9),ssc='0,1,2,1,0,2',ssf=float(0.9))
+
+        # Get the selected vertices and their surrounding vertices
+        selected_vertices = cmds.ls(selection=True, flatten=True)
+        cmds.select(selected_vertices)
+        cmds.rotate( 0, 0, '30deg', os=True)
+
     #apply button clicked
     @one_undo
     def apply():
+        getSelectedObjects()
 
-        addInString(32,1,40)
+        tilt(t.center)
 
         """
-        getSelectedObjects()
 
         #convert mesh vertices to vertex indices
         vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
