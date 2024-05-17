@@ -458,7 +458,7 @@ def showWindow():
         randLoc = random.random()
         if (randLoc <= 0.01):
             #distribute at top of cylinder
-            distributeInRing(obj, t2.center)
+            distributeAtTop(obj, t2.center)
         else:
             #distribute around
             #get center of cylinder
@@ -480,12 +480,12 @@ def showWindow():
         if (distribute_top_checkbox):
             for obj in objs:
                 print("new obj: ", obj)
-                distributeInRing(obj,t2.center)
+                distributeAtTop(obj,t2.center)
         else:
             for obj in objs:
                 distribute(obj)
 
-    def distributeInRing(obj,obj2):
+    def distributeAtTop(obj,obj2):
         farthestVIndex = getFarthestVerticesFromPivot(obj2)
         surroundingVertices = getVerticesSurroundingVertex(obj2, farthestVIndex)
         snapToVertices(obj, surroundingVertices)
