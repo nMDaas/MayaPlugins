@@ -256,6 +256,76 @@ def showWindow():
         # Delete history
         cmds.delete(constructionHistory=True)
 
+        # this gets top most vertices and tip of object 
+   
+    #assuming that the object's pivot is at least slightly closer to one side 
+    def getFarthestVerticesFromPivot(obj):
+        getPivotCommand = "getAttr " + obj + ".scalePivot"
+        pivotResult = mel.eval(getPivotCommand) #pivot = (commResult[0],commResult[1],commResult[2])
+
+        #convert mesh vertices to vertex indices
+        objVertexIndices = cmds.polyListComponentConversion(obj, toVertex=True)
+        objVertexList = cmds.ls(objVertexIndices, flatten=True)
+
+        #find farthest vertex away from pivot
+        vIndex = 0
+        maxDistance = -1000.0
+        maxX = -1000.0
+        maxY = -1000.0
+        maxZ = -1000.0
+        count = 0
+        for v in objVertexList:
+            vPos =  cmds.pointPosition(v, world=True)
+            dist = math.sqrt(((vPos[0]-pivotResult[0])**2)+((vPos[1]-pivotResult[1])**2)+((vPos[2]-pivotResult[2])**2))
+            if (dist > maxDistance):
+                maxDistance = dist
+                maxX = (vPos[0]-pivotResult[0])**2
+                maxY = (vPos[1]-pivotResult[1])**2
+                maxZ = (vPos[2]-pivotResult[2])**2
+                vIndex = count
+            count = count + 1
+
+        return vIndex
+
+    #gets vertices of obj surrounding v[vIndex] of object
+    def getVerticesSurroundingVertex(obj, vIndex):
+        #get pivot
+        getPivotCommand = "getAttr " + obj + ".scalePivot"
+        pivotResult = mel.eval(getPivotCommand) #pivot = (commResult[0],commResult[1],commResult[2])
+
+        #convert mesh vertices to vertex indices
+        objVertexIndices = cmds.polyListComponentConversion(obj, toVertex=True)
+        objVertexList = cmds.ls(objVertexIndices, flatten=True)
+
+        #get distance between pivot and farthest vertex
+        vPos = cmds.pointPosition(objVertexList[vIndex], world=True)
+        maxDist = math.sqrt(((vPos[0]-pivotResult[0])**2)+((vPos[1]-pivotResult[1])**2)+((vPos[2]-pivotResult[2])**2))
+
+        #list of indices surrounding farthest vertex
+        surroundingVertices = []
+
+        #add to list
+        count = 0
+        for v in objVertexList:
+            vP =  cmds.pointPosition(v, world=True)
+            dist = math.sqrt(((vP[0]-pivotResult[0])**2)+((vP[1]-pivotResult[1])**2)+((vP[2]-pivotResult[2])**2))
+            if (abs(maxDist - dist) <= 0.02):
+                print("surrounding: ", count)
+                surroundingVertices.append(v)
+            count = count + 1
+
+        return surroundingVertices
+
+    #snaps objToSnap to one vertex in vertices
+    def snapToVertices(objToSnap, vertices):
+        randIndex = (int) (random.random() * len(vertices))
+        randVertexPos = cmds.pointPosition(vertices[randIndex], world=True)
+
+        cmds.select(t.center)
+        moveCommand = "move -rpr " + str(randVertexPos[0]) + " " + str(randVertexPos[1]) + " " + str(randVertexPos[2])
+        mel.eval(moveCommand)
+
+
     # DISTORT FUNCTIONS
 
     def createDistortion(numVertexIndices):
@@ -399,72 +469,6 @@ def showWindow():
     def distributeObjs(objs):
         for obj in objs:
             distribute(obj)
-
-    # this gets top most vertices and tip of object 
-    # assuming that the object's pivot is at least slightly closer to one side 
-    def getFarthestVerticesFromPivot(obj):
-        getPivotCommand = "getAttr " + obj + ".scalePivot"
-        pivotResult = mel.eval(getPivotCommand) #pivot = (commResult[0],commResult[1],commResult[2])
-
-        #convert mesh vertices to vertex indices
-        objVertexIndices = cmds.polyListComponentConversion(obj, toVertex=True)
-        objVertexList = cmds.ls(objVertexIndices, flatten=True)
-
-        #find farthest vertex away from pivot
-        vIndex = 0
-        maxDistance = -1000.0
-        maxX = -1000.0
-        maxY = -1000.0
-        maxZ = -1000.0
-        count = 0
-        for v in objVertexList:
-            vPos =  cmds.pointPosition(v, world=True)
-            dist = math.sqrt(((vPos[0]-pivotResult[0])**2)+((vPos[1]-pivotResult[1])**2)+((vPos[2]-pivotResult[2])**2))
-            if (dist > maxDistance):
-                maxDistance = dist
-                maxX = (vPos[0]-pivotResult[0])**2
-                maxY = (vPos[1]-pivotResult[1])**2
-                maxZ = (vPos[2]-pivotResult[2])**2
-                vIndex = count
-            count = count + 1
-
-        return vIndex
-
-    def getVerticesSurroundingVertex(obj, vIndex):
-        #get pivot
-        getPivotCommand = "getAttr " + obj + ".scalePivot"
-        pivotResult = mel.eval(getPivotCommand) #pivot = (commResult[0],commResult[1],commResult[2])
-
-        #convert mesh vertices to vertex indices
-        objVertexIndices = cmds.polyListComponentConversion(obj, toVertex=True)
-        objVertexList = cmds.ls(objVertexIndices, flatten=True)
-
-        #get distance between pivot and farthest vertex
-        vPos = cmds.pointPosition(objVertexList[vIndex], world=True)
-        maxDist = math.sqrt(((vPos[0]-pivotResult[0])**2)+((vPos[1]-pivotResult[1])**2)+((vPos[2]-pivotResult[2])**2))
-
-        #list of indices surrounding farthest vertex
-        surroundingVertices = []
-
-        #add to list
-        count = 0
-        for v in objVertexList:
-            vP =  cmds.pointPosition(v, world=True)
-            dist = math.sqrt(((vP[0]-pivotResult[0])**2)+((vP[1]-pivotResult[1])**2)+((vP[2]-pivotResult[2])**2))
-            if (abs(maxDist - dist) <= 0.02):
-                print("surrounding: ", count)
-                surroundingVertices.append(v)
-            count = count + 1
-
-        return surroundingVertices
-
-    def snapToVertices(objToSnap, vertices):
-        randIndex = (int) (random.random() * len(vertices))
-        randVertexPos = cmds.pointPosition(vertices[randIndex], world=True)
-
-        cmds.select(t.center)
-        moveCommand = "move -rpr " + str(randVertexPos[0]) + " " + str(randVertexPos[1]) + " " + str(randVertexPos[2])
-        mel.eval(moveCommand)
 
     def distributeInRing(obj,obj2):
         farthestVIndex = getFarthestVerticesFromPivot(obj2)
