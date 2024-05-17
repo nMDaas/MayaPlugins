@@ -19,6 +19,8 @@ from functools import wraps
 import maya.mel as mel
 import re
 
+from .distort_utils import addInString
+
 #keep track of transform settings created by user
 class Transform():
     def __init__(self):
@@ -492,9 +494,11 @@ def showWindow():
     #apply button clicked
     @one_undo
     def apply():
-        getSelectedObjects()
 
-        #distributeInRing()
+        addInString(32,1,40)
+
+        """
+        getSelectedObjects()
 
         #convert mesh vertices to vertex indices
         vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
@@ -517,6 +521,7 @@ def showWindow():
         else:
             duplicateAndDistort()
             distributeObjs(duplicates)
+        """
 
 #Close dialog
     def close():

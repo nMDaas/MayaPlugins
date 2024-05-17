@@ -18,5 +18,8 @@ if 'PlantGenerator' in sys.modules:
 if 'PlantGenerator.plant_plugin' in sys.modules:
     del sys.modules['PlantGenerator.plant_plugin']
 import PlantGenerator.plant_plugin
+if 'PlantGenerator.distort_utils' in sys.modules:
+    del sys.modules['PlantGenerator.distort_utils']
+import PlantGenerator.distort_utils
 
 window = PlantGenerator.plant_plugin.showWindow()
