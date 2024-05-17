@@ -259,6 +259,7 @@ def showWindow():
     # DISTORT FUNCTIONS
 
     def createDistortion(numVertexIndices):
+        print("numVertexIndices: ", numVertexIndices)
         randIndex = (int) (random.random() * numVertexIndices) + 1
 
         global vertexList
@@ -375,16 +376,23 @@ def showWindow():
         cmds.select(obj)
         print("obj: ", obj)
 
-        #get center of cylinder
-        bbox = cmds.exactWorldBoundingBox(t2.center) #returns xmin, ymin, zmin, xmax, ymax, zmax
-        randX = random.uniform(bbox[0],bbox[3]) 
-        randY = random.uniform(bbox[1],bbox[4]) 
-        randZ = random.uniform(bbox[2],bbox[5]) 
+        #either distribute at top of cylinder or around but the former has a lower chance than latter
+        randLoc = random.random()
+        if (randLoc <= 0.2):
+            #distribute at top of cylinder
+            distributeInRing(obj, t2.center)
+        else:
+            #distribute around
+            #get center of cylinder
+            bbox = cmds.exactWorldBoundingBox(t2.center) #returns xmin, ymin, zmin, xmax, ymax, zmax
+            randX = random.uniform(bbox[0],bbox[3]) 
+            randY = random.uniform(bbox[1],bbox[4]) 
+            randZ = random.uniform(bbox[2],bbox[5]) 
 
-        pivot_point = cmds.xform(obj, q=True, rp=True, ws=True) #find pivot point of t
-        moveCommand = "move -rpr " + str(randX) + " " + str(randY) + " " + str(randZ)
-        mel.eval(moveCommand)
-        rotate_around_target(obj, t2.center)
+            pivot_point = cmds.xform(obj, q=True, rp=True, ws=True) #find pivot point of t
+            moveCommand = "move -rpr " + str(randX) + " " + str(randY) + " " + str(randZ)
+            mel.eval(moveCommand)
+            rotate_around_target(obj, t2.center)
 
     #to distribute all objects in objs[] around t2
     #t's pivot should be at the corner at which user wants it to connect to t2
@@ -450,7 +458,7 @@ def showWindow():
 
         return surroundingVertices
 
-    def snapToVertices(vertices):
+    def snapToVertices(objToSnap, vertices):
         randIndex = (int) (random.random() * len(vertices))
         randVertexPos = cmds.pointPosition(vertices[randIndex], world=True)
 
@@ -458,20 +466,19 @@ def showWindow():
         moveCommand = "move -rpr " + str(randVertexPos[0]) + " " + str(randVertexPos[1]) + " " + str(randVertexPos[2])
         mel.eval(moveCommand)
 
-    def distributeInRing():
-        farthestVIndex = getFarthestVerticesFromPivot(t2.center)
-        surroundingVertices = getVerticesSurroundingVertex(t2.center, farthestVIndex)
-        snapToVertices(surroundingVertices)
-        rotate_around_target(t.center, t2.center)
+    def distributeInRing(obj,obj2):
+        farthestVIndex = getFarthestVerticesFromPivot(obj2)
+        surroundingVertices = getVerticesSurroundingVertex(obj2, farthestVIndex)
+        snapToVertices(obj, surroundingVertices)
+        rotate_around_target(obj, obj2)
 
     #apply button clicked
     @one_undo
     def apply():
         getSelectedObjects()
 
-        distributeInRing()
+        #distributeInRing()
 
-        """
         #convert mesh vertices to vertex indices
         vertexIndices = cmds.polyListComponentConversion(t.center, toVertex=True)
         global vertexList
@@ -493,7 +500,6 @@ def showWindow():
         else:
             duplicateAndDistort()
             distributeObjs(duplicates)
-        """
 
 #Close dialog
     def close():
