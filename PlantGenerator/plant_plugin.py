@@ -100,9 +100,11 @@ def showWindow():
     global distort_checkbox
     global distribute_checkbox
     global dd_checkbox
+    global distribute_top_checkbox
     distort_checkbox = False
     distribute_checkbox = False
     dd_checkbox = False
+    distribute_top_checkbox = False
 
     global objsToDistribute
     objsToDistribute = []
@@ -221,6 +223,10 @@ def showWindow():
     def set_z_max_scale(scale):
         global z_max_scale
         z_max_scale = scale
+
+    def set_distribute_top_checkbox(c):
+        global distribute_top_checkbox
+        distribute_top_checkbox = ui.distribute_top_checkbox.checkState()
 
     #general useful methods
 
@@ -516,6 +522,7 @@ def showWindow():
     ui.distort_checkbox.stateChanged.connect(partial(set_distort_checkbox))
     ui.distribute_checkbox.stateChanged.connect(partial(set_distribute_checkbox))
     ui.dd_checkbox.stateChanged.connect(partial(set_dd_checkbox))
+    ui.distribute_top_checkbox.stateChanged.connect(partial(set_distribute_top_checkbox))
 
     ui.duplicates_input.valueChanged.connect(partial(set_num_duplicates))
     ui.count_input.valueChanged.connect(partial(set_numDistortions))
