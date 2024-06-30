@@ -88,10 +88,26 @@ def showWindow():
         normal_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Normal.1001.png')
         normalFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Normal.1001.png'
         cmds.setAttr(f"{normal_file_node}.fileTextureName", normalFilePath, type="string")
+        cmds.setAttr(f"{normal_file_node}.alphaIsLuminance", True)
 
+        # Create a file texture node for Metalness
+        metalness_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Metalness.1001.png')
+        metalnessFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Metalness.1001.png'
+        cmds.setAttr(f"{metalness_file_node}.fileTextureName", metalnessFilePath, type="string")
+        cmds.setAttr(f"{metalness_file_node}.alphaIsLuminance", True)
+
+        # Create a file texture node for Roughness
+        roughness_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Roughess.1001.png')
+        roughnessFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Roughness.1001.png'
+        cmds.setAttr(f"{roughness_file_node}.fileTextureName", roughnessFilePath, type="string")
+        cmds.setAttr(f"{roughness_file_node}.alphaIsLuminance", True)
+
+        # Connect place2dTexture node to file nodes
         for src, dest in connections:
             cmds.connectAttr(f"{place2d_texture}.{src}", f"{baseColor_file_node}.{dest}", force=True)
             cmds.connectAttr(f"{place2d_texture}.{src}", f"{normal_file_node}.{dest}", force=True)
+            cmds.connectAttr(f"{place2d_texture}.{src}", f"{metalness_file_node}.{dest}", force=True)
+            cmds.connectAttr(f"{place2d_texture}.{src}", f"{roughness_file_node}.{dest}", force=True)
         
         # Create a multiplyDivide node
         multiply_divide_node = cmds.shadingNode('multiplyDivide', asUtility=True, name='multiplyDivide1')
@@ -105,7 +121,9 @@ def showWindow():
         cmds.connectAttr(f"{multiply_divide_node}.output", f"{material}.baseColor", force=True) # Connect multiplyDivide to material
         cmds.connectAttr(f"{baseColor_file_node}.outColor", f"{multiply_divide_node}.input1", force=True) # Connect baseColor file to multiplyDivide
         cmds.connectAttr(f"{bump2d_node}.outNormal", f"{material}.normalCamera", force=True) # Connect bump2d to Normal Camera of material
-        cmds.connectAttr(f"{normal_file_node}.outAlpha", f"{bump2d_node}.bumpValue", force=True)
+        cmds.connectAttr(f"{normal_file_node}.outAlpha", f"{bump2d_node}.bumpValue", force=True) # Connect normal file to bump2d
+        cmds.connectAttr(f"{metalness_file_node}.outAlpha", f"{material}.metalness", force=True)
+        cmds.connectAttr(f"{roughness_file_node}.outAlpha", f"{material}.specularRoughness", force=True)
     
     #apply button clicked
     def apply():
