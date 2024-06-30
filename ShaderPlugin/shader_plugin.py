@@ -52,6 +52,8 @@ def showWindow():
         # Create a new material
         material = cmds.shadingNode('aiStandardSurface', asShader=True, name=material_name)
         cmds.setAttr(f"{material}.diffuseRoughness", 0.000)
+        cmds.setAttr(f'{material}.emission', 1)
+        cmds.setAttr(f'{material}.emissionColor', 0, 0, 0, type='double3')
         
         # Create a shading group
         shading_group = cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name="set")
@@ -89,18 +91,21 @@ def showWindow():
         normalFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Normal.1001.png'
         cmds.setAttr(f"{normal_file_node}.fileTextureName", normalFilePath, type="string")
         cmds.setAttr(f"{normal_file_node}.alphaIsLuminance", True)
+        cmds.setAttr(f'{normal_file_node}.colorSpace', 'Raw', type='string')
 
         # Create a file texture node for Metalness
         metalness_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Metalness.1001.png')
         metalnessFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Metalness.1001.png'
         cmds.setAttr(f"{metalness_file_node}.fileTextureName", metalnessFilePath, type="string")
         cmds.setAttr(f"{metalness_file_node}.alphaIsLuminance", True)
+        cmds.setAttr(f'{metalness_file_node}.colorSpace', 'Raw', type='string')
 
         # Create a file texture node for Roughness
         roughness_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Roughess.1001.png')
         roughnessFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Roughness.1001.png'
         cmds.setAttr(f"{roughness_file_node}.fileTextureName", roughnessFilePath, type="string")
         cmds.setAttr(f"{roughness_file_node}.alphaIsLuminance", True)
+        cmds.setAttr(f'{roughness_file_node}.colorSpace', 'Raw', type='string')
 
         # Connect place2dTexture node to file nodes
         for src, dest in connections:
