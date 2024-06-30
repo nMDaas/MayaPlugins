@@ -15,8 +15,8 @@ if folder not in sys.path:
 
 if 'ShaderPlugin' in sys.modules:
     del sys.modules['ShaderPlugin']
-if 'ShaderPlugin.plant_plugin' in sys.modules:
-    del sys.modules['ShaderPlugin.plant_plugin']
-import ShaderPlugin.plant_plugin
+if 'ShaderPlugin.shader_plugin' in sys.modules:
+    del sys.modules['ShaderPlugin.shader_plugin']
+import ShaderPlugin.shader_plugin
 
-window = ShaderPlugin.plant_plugin.showWindow()
+window = ShaderPlugin.shader_plugin.showWindow()
