@@ -57,7 +57,7 @@ def showWindow():
         shading_group = cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name="set")
 
         # Create a place2dTexture node
-        place2d_texture = cmds.shadingNode('place2dTexture', asUtility=True, name='myPlace2dTexture')
+        place2d_texture = cmds.shadingNode('place2dTexture', asUtility=True, name='place2dTexture')
         connections = [
             ('coverage', 'coverage'),
             ('translateFrame', 'translateFrame'),
@@ -84,17 +84,28 @@ def showWindow():
         baseColorFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_BaseColor.1001.png'
         cmds.setAttr(f"{baseColor_file_node}.fileTextureName", baseColorFilePath, type="string")
 
+        # Create a file texture node for Normal
+        normal_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Normal.1001.png')
+        normalFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Normal.1001.png'
+        cmds.setAttr(f"{normal_file_node}.fileTextureName", normalFilePath, type="string")
+
         for src, dest in connections:
             cmds.connectAttr(f"{place2d_texture}.{src}", f"{baseColor_file_node}.{dest}", force=True)
+            cmds.connectAttr(f"{place2d_texture}.{src}", f"{normal_file_node}.{dest}", force=True)
         
         # Create a multiplyDivide node
         multiply_divide_node = cmds.shadingNode('multiplyDivide', asUtility=True, name='multiplyDivide1')
         cmds.setAttr(f"{multiply_divide_node}.operation", 1) # Set operation as Multiply (1: multiply, 2: divide, 3: power)
         cmds.setAttr(f"{multiply_divide_node}.input2", 1, 1, 1, type="double3")
 
+        # Create a bump2d node
+        bump2d_node = cmds.shadingNode('bump2d', asUtility=True, name='bump2d1')
+
         cmds.connectAttr(material + '.outColor', shading_group + '.surfaceShader', force=True) # Connect material to shading group
         cmds.connectAttr(f"{multiply_divide_node}.output", f"{material}.baseColor", force=True) # Connect multiplyDivide to material
-        cmds.connectAttr(f"{baseColor_file_node}.outColor", f"{multiply_divide_node}.input1", force=True)
+        cmds.connectAttr(f"{baseColor_file_node}.outColor", f"{multiply_divide_node}.input1", force=True) # Connect baseColor file to multiplyDivide
+        cmds.connectAttr(f"{bump2d_node}.outNormal", f"{material}.normalCamera", force=True) # Connect bump2d to Normal Camera of material
+        cmds.connectAttr(f"{normal_file_node}.outAlpha", f"{bump2d_node}.bumpValue", force=True)
     
     #apply button clicked
     def apply():
