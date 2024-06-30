@@ -48,21 +48,57 @@ def showWindow():
 
     t = Transform()
 
-    def create_material(material_type='aiStandardSurface', material_name='myAiStandardSurface'):
+    def create_ai_standard_surface(material_name):
         # Create a new material
-        material = cmds.shadingNode(material_type, asShader=True, name=material_name)
+        material = cmds.shadingNode('aiStandardSurface', asShader=True, name=material_name)
+        cmds.setAttr(f"{material}.diffuseRoughness", 0.000)
         
         # Create a shading group
-        shading_group = cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name=material_name + "SG")
+        shading_group = cmds.sets(renderable=True, noSurfaceShader=True, empty=True, name="set")
+
+        # Create a place2dTexture node
+        place2d_texture = cmds.shadingNode('place2dTexture', asUtility=True, name='myPlace2dTexture')
+        connections = [
+            ('coverage', 'coverage'),
+            ('translateFrame', 'translateFrame'),
+            ('rotateFrame', 'rotateFrame'),
+            ('mirrorU', 'mirrorU'),
+            ('mirrorV', 'mirrorV'),
+            ('stagger', 'stagger'),
+            ('wrapU', 'wrapU'),
+            ('wrapV', 'wrapV'),
+            ('repeatUV', 'repeatUV'),
+            ('offset', 'offset'),
+            ('rotateUV', 'rotateUV'),
+            ('noiseUV', 'noiseUV'),
+            ('vertexUvOne', 'vertexUvOne'),
+            ('vertexUvTwo', 'vertexUvTwo'),
+            ('vertexUvThree', 'vertexUvThree'),
+            ('vertexCameraOne', 'vertexCameraOne'),
+            ('outUV', 'uvCoord'),
+            ('outUvFilterSize', 'uvFilterSize')
+        ]
+
+        # Create a file texture node for baseColor
+        baseColor_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_BaseColor.1001.png')
+        baseColorFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_BaseColor.1001.png'
+        cmds.setAttr(f"{baseColor_file_node}.fileTextureName", baseColorFilePath, type="string")
+
+        for src, dest in connections:
+            cmds.connectAttr(f"{place2d_texture}.{src}", f"{baseColor_file_node}.{dest}", force=True)
         
-        # Connect the material to the shading group
-        cmds.connectAttr(material + '.outColor', shading_group + '.surfaceShader', force=True)
-        
-        return material, shading_group
+        # Create a multiplyDivide node
+        multiply_divide_node = cmds.shadingNode('multiplyDivide', asUtility=True, name='multiplyDivide1')
+        cmds.setAttr(f"{multiply_divide_node}.operation", 1) # Set operation as Multiply (1: multiply, 2: divide, 3: power)
+        cmds.setAttr(f"{multiply_divide_node}.input2", 1, 1, 1, type="double3")
+
+        cmds.connectAttr(material + '.outColor', shading_group + '.surfaceShader', force=True) # Connect material to shading group
+        cmds.connectAttr(f"{multiply_divide_node}.output", f"{material}.baseColor", force=True) # Connect multiplyDivide to material
+        cmds.connectAttr(f"{baseColor_file_node}.outColor", f"{multiply_divide_node}.input1", force=True)
     
     #apply button clicked
     def apply():
-        create_material()
+        create_ai_standard_surface("MyTestAISSMaterial")
 
 #Close dialog
     def close():
