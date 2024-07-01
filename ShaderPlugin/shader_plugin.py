@@ -169,6 +169,9 @@ def showWindow():
         print(f"V min: {v_min}, V max: {v_max}")
     """
 
+    def create_textures():
+        print("create textures")
+
     #apply button clicked
     def apply():
         print("hello")

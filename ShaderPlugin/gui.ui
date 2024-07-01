@@ -16,39 +16,11 @@
             <string>Dialog</string>
         </property>
 
-        <widget class="QLabel" name="label_7">
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>20</y>
-                    <width>581</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Outline/Fill tool for positioning multiple objects around or </string>
-            </property>
-        </widget>
-
-        <widget class="QLabel" name="label_8">
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>40</y>
-                    <width>331</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>surrounding another one at the center.</string>
-            </property>
-        </widget>
-
         <widget class="QWidget" name="gridLayoutWidget">
             <property name="geometry">
                 <rect>
                     <x>30</x>
-                    <y>80</y>
+                    <y>30</y>
                     <width>361</width>
                     <height>479</height>
                 </rect>
@@ -62,38 +34,16 @@
                         <item>
                             <widget class="QLabel" name="label">
                                 <property name="text">
-                                    <string>Select Center Object</string>
+                                    <string>Select Texture Folder:</string>
                                 </property>
                             </widget>
-                        </item>
-
-                        <item>
-                            <layout class="QHBoxLayout" name="horizontalLayout_4">
-                                <item>
-                                    <widget class="QLabel" name="label_11">
-                                        <property name="text">
-                                            <string>Current Center:</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                                <item>
-                                    <widget class="QLabel" name="center_objs">
-                                        <property name="text">
-                                            <string>None</string>
-                                        </property>
-                                        <property name="wordWrap">
-                                            <bool>true</bool>
-                                        </property>
-                                    </widget>
-                                </item>
-                            </layout>
                         </item>
                     </layout>
                 </item>
                 <item row="0" column="1">
-                    <widget class="QPushButton" name="center_button">
+                    <widget class="QPushButton" name="select_button">
                         <property name="text">
-                            <string>Set</string>
+                            <string>Select Folder</string>
                         </property>
                     </widget>
                 </item>
