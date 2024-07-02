@@ -29,8 +29,8 @@ def showWindow():
     
     ui.setParent(mayaMainWindow)
     ui.setWindowFlags(Qt.Window)
-    ui.setWindowTitle('Place Around Center Tool')
-    ui.setObjectName('Place_Around_Center')
+    ui.setWindowTitle('Shader Plugin')
+    ui.setObjectName('Shader plugin')
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
     global folder_path
