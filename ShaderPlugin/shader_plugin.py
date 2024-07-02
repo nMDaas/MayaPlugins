@@ -73,26 +73,26 @@ def showWindow():
 
         # Create a file texture node for baseColor
         baseColor_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_BaseColor.1001.png')
-        baseColorFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_BaseColor.1001.png'
+        baseColorFilePath = baseColorFile
         cmds.setAttr(f"{baseColor_file_node}.fileTextureName", baseColorFilePath, type="string")
 
         # Create a file texture node for Normal
         normal_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Normal.1001.png')
-        normalFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Normal.1001.png'
+        normalFilePath = normalFile
         cmds.setAttr(f"{normal_file_node}.fileTextureName", normalFilePath, type="string")
         cmds.setAttr(f"{normal_file_node}.alphaIsLuminance", True)
         cmds.setAttr(f'{normal_file_node}.colorSpace', 'Raw', type='string')
 
         # Create a file texture node for Metalness
         metalness_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Metalness.1001.png')
-        metalnessFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Metalness.1001.png'
+        metalnessFilePath = metalnessFile
         cmds.setAttr(f"{metalness_file_node}.fileTextureName", metalnessFilePath, type="string")
         cmds.setAttr(f"{metalness_file_node}.alphaIsLuminance", True)
         cmds.setAttr(f'{metalness_file_node}.colorSpace', 'Raw', type='string')
 
         # Create a file texture node for Roughness
         roughness_file_node = cmds.shadingNode('file', asTexture=True, name='bigPlantUVs_lambert3_Roughess.1001.png')
-        roughnessFilePath = '/Users/natashadaas/MyPlugins/ShaderPlugin/testFiles/bigPlantTextures/bigPlantUVs_lambert3_Roughness.1001.png'
+        roughnessFilePath = roughnessFile
         cmds.setAttr(f"{roughness_file_node}.fileTextureName", roughnessFilePath, type="string")
         cmds.setAttr(f"{roughness_file_node}.alphaIsLuminance", True)
         cmds.setAttr(f'{roughness_file_node}.colorSpace', 'Raw', type='string')
@@ -209,8 +209,8 @@ def showWindow():
             my_string = value[0]
             index = my_string.find('_')
             result = my_string[:index]
-            material_name = result + "_" + key
-            print("material_name", material_name)
+            material_name = result + key
+            #print("material_name", material_name)
 
             for file in value:
                 if "BaseColor" in file:
@@ -224,14 +224,14 @@ def showWindow():
                 if "Roughness" in file:
                     roughnessFile = file
 
-            print("baseColorFile: ", baseColorFile)
-            print("heightFile: ", heightFile) 
-            print("metalnessFile: ", metalnessFile)
-            print("normalFile: ", normalFile)
-            print("roughnessFile: ", roughnessFile)
-            print("\n")
+            #print("baseColorFile: ", baseColorFile)
+            #print("heightFile: ", heightFile) 
+            #print("metalnessFile: ", metalnessFile)
+            #print("normalFile: ", normalFile)
+            #print("roughnessFile: ", roughnessFile)
+            #print("\n")
 
-            #create_ai_standard_surface(material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile)
+            create_ai_standard_surface(material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile)
 
     #apply button clicked
     def apply():
