@@ -35,8 +35,10 @@ def showWindow():
 
     global folder_path
     folder_path = ''
+    global texture_files
+    texture_files = []
 
-    def create_ai_standard_surface(material_name):
+    def create_ai_standard_surface(material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile):
         # Create a new material
         material = cmds.shadingNode('aiStandardSurface', asShader=True, name=material_name)
         cmds.setAttr(f"{material}.diffuseRoughness", 0.000)
@@ -178,11 +180,58 @@ def showWindow():
 
     def create_textures():
         global folder_path
+        global texture_files
+
         # get all files in folder_path
-        files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-        print(f'Files in {folder_path}:')
-        for file in files:
-            print(file)
+        texture_files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+        
+        #material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile
+
+        # organize texture_files by texture numbers
+        texture_groups = {}
+        for file in texture_files:
+            if file.endswith('.png'):
+                # get texture number
+                length = len(file)
+                strTemp = file[length - 8:] # texture number + .png
+                textureNum = strTemp[:4]
+
+                if textureNum in texture_groups:
+                    # textureNum exists, append file to the existing array
+                    texture_groups[textureNum].append(file)
+                else:
+                    # textureNum does not exist, initialize a new array with the value
+                    texture_groups[textureNum] = [file]
+        
+        # iterate through texture_groups and create textures
+        for key,value in texture_groups.items():
+            # extract name
+            my_string = value[0]
+            index = my_string.find('_')
+            result = my_string[:index]
+            material_name = result + "_" + key
+            print("material_name", material_name)
+
+            for file in value:
+                if "BaseColor" in file:
+                    baseColorFile = file
+                if "Height" in file:
+                    heightFile = file
+                if "Metalness" in file:
+                    metalnessFile = file
+                if "Normal" in file:
+                    normalFile = file
+                if "Roughness" in file:
+                    roughnessFile = file
+
+            print("baseColorFile: ", baseColorFile)
+            print("heightFile: ", heightFile) 
+            print("metalnessFile: ", metalnessFile)
+            print("normalFile: ", normalFile)
+            print("roughnessFile: ", roughnessFile)
+            print("\n")
+
+            #create_ai_standard_surface(material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile)
 
     #apply button clicked
     def apply():
