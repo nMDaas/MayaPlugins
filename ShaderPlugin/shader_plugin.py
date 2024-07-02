@@ -10,10 +10,7 @@ from functools import partial
 import maya.cmds as cmds
 from maya import OpenMayaUI
 from pathlib import Path
-import math
 from shiboken2 import wrapInstance
-from random import randrange
-import random
 
 #keep track of transform settings created by user
 class Transform():
@@ -169,6 +166,23 @@ def showWindow():
         print(f"V min: {v_min}, V max: {v_max}")
     """
 
+    # open dialog to allow user to choose texture folder
+    def showDialog():
+        initial_directory = "/Users/natashadaas"  # Replace this with the desired initial directory
+        dialog = QFileDialog()
+        dialog.setOption(QFileDialog.DontUseNativeDialog, True)
+        dialog.setFileMode(QFileDialog.Directory)
+        dialog.setOption(QFileDialog.ShowDirsOnly, True)
+        dialog.setDirectory(initial_directory)
+        dialog.setWindowTitle("Select Folder")
+
+        # show which filename was selected if a folder was selected
+        if dialog.exec_():
+            folder_path = dialog.selectedFiles()[0]
+            ui.filename_label.setText(folder_path)
+        else:
+            ui.filename_label.setText('')
+
     def create_textures():
         print("create textures")
 
@@ -185,6 +199,7 @@ def showWindow():
     #connect buttons to functions
     ui.apply_button.clicked.connect(partial(apply))
     ui.close_button.clicked.connect(partial(close))
+    ui.select_button.clicked.connect(partial(showDialog))
      
     # show the QT ui
     ui.show()
