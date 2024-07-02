@@ -11,6 +11,7 @@ import maya.cmds as cmds
 from maya import OpenMayaUI
 from pathlib import Path
 from shiboken2 import wrapInstance
+import os
 
 #keep track of transform settings created by user
 class Transform():
@@ -43,7 +44,8 @@ def showWindow():
     ui.setObjectName('Place_Around_Center')
     ui.setWindowFlags(Qt.Window | Qt.WindowStaysOnTopHint)
 
-    t = Transform()
+    global folder_path
+    folder_path = ''
 
     def create_ai_standard_surface(material_name):
         # Create a new material
@@ -176,6 +178,8 @@ def showWindow():
         dialog.setDirectory(initial_directory)
         dialog.setWindowTitle("Select Folder")
 
+        global folder_path
+
         # show which filename was selected if a folder was selected
         if dialog.exec_():
             folder_path = dialog.selectedFiles()[0]
@@ -184,11 +188,16 @@ def showWindow():
             ui.filename_label.setText('')
 
     def create_textures():
-        print("create textures")
+        global folder_path
+        # get all files in folder_path
+        files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
+        print(f'Files in {folder_path}:')
+        for file in files:
+            print(file)
 
     #apply button clicked
     def apply():
-        print("hello")
+        create_textures()
         #create_ai_standard_surface("MyTestAISSMaterial")
         #get_uv_bounding_box('polySurface51')
 
