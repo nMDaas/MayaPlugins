@@ -12,17 +12,6 @@ from maya import OpenMayaUI
 from pathlib import Path
 from shiboken2 import wrapInstance
 import os
-
-#keep track of transform settings created by user
-class Transform():
-    def __init__(self):
-        self.radius = 0.0
-        self.outer = None
-        self.center = None
-        self.scatter = None
-        self.shape = None
-        self.duplicate = False
-        self.num_duplicate = 0
         
 #show gui window
 def showWindow():
