@@ -12,6 +12,17 @@ from maya import OpenMayaUI
 from pathlib import Path
 from shiboken2 import wrapInstance
 import os
+
+#keep track of transform settings created by user
+class Transform():
+    def __init__(self):
+        self.radius = 0.0
+        self.outer = None
+        self.center = None
+        self.scatter = None
+        self.shape = None
+        self.duplicate = False
+        self.num_duplicate = 0
         
 #show gui window
 def showWindow():
@@ -37,6 +48,8 @@ def showWindow():
     folder_path = ''
     global texture_files
     texture_files = []
+
+    t = Transform()
 
     def create_ai_standard_surface(material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile, textureNum):
         # Create a new material
@@ -220,9 +233,31 @@ def showWindow():
 
             create_ai_standard_surface(material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile, key)
 
+    # Set object/group to be textuerd
+    def getSelectedObjects():
+        selected_objects = cmds.ls(selection=True)
+        return selected_objects[0]
+
+    def apply_texture_to_mesh(obj):
+        cmds.select(obj, replace=True)
+        
+        # Assign the shader to selected meshes
+        cmds.hyperShade(assign="lambert2")
+
+    def apply_textures(selectedObject):
+        if cmds.nodeType(selectedObject) == 'transform':
+            #print("group node: ", selectedObject)
+            children = cmds.listRelatives(selectedObject, children=True, fullPath=True) or []
+            for child in children:
+                apply_textures(child)
+        if cmds.nodeType(selectedObject) == 'mesh':
+            apply_texture_to_mesh(selectedObject)
+
     #apply button clicked
     def apply():
-        create_textures()
+        #create_textures()
+        selectedObject = getSelectedObjects()
+        apply_textures(selectedObject)
 
 #Close dialog
     def close():
