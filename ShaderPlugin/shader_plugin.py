@@ -101,12 +101,21 @@ def showWindow():
         cmds.setAttr(f"{roughness_file_node}.alphaIsLuminance", True)
         cmds.setAttr(f'{roughness_file_node}.colorSpace', 'Raw', type='string')
 
+        # Create a file texture node for Height
+        heightNodeName = material_name + "_" + "Height" + "_" + textureNum
+        height_file_node = cmds.shadingNode('file', asTexture=True, name=heightNodeName)
+        heightFilePath = heightFile
+        cmds.setAttr(f"{height_file_node}.fileTextureName", heightFilePath, type="string")
+        cmds.setAttr(f"{height_file_node}.alphaIsLuminance", True)
+        cmds.setAttr(f'{height_file_node}.colorSpace', 'Raw', type='string')
+
         # Connect place2dTexture node to file nodes
         for src, dest in connections:
             cmds.connectAttr(f"{place2d_texture}.{src}", f"{baseColor_file_node}.{dest}", force=True)
             cmds.connectAttr(f"{place2d_texture}.{src}", f"{normal_file_node}.{dest}", force=True)
             cmds.connectAttr(f"{place2d_texture}.{src}", f"{metalness_file_node}.{dest}", force=True)
             cmds.connectAttr(f"{place2d_texture}.{src}", f"{roughness_file_node}.{dest}", force=True)
+            cmds.connectAttr(f"{place2d_texture}.{src}", f"{height_file_node}.{dest}", force=True)
         
         # Create a multiplyDivide node
         multiply_divide_node = cmds.shadingNode('multiplyDivide', asUtility=True, name='multiplyDivide1')
@@ -115,14 +124,21 @@ def showWindow():
 
         # Create a bump2d node
         bump2d_node = cmds.shadingNode('bump2d', asUtility=True, name='bump2d1')
+        cmds.setAttr(bump2d_node + '.bumpInterp', 1)
+
+        # Create a displacement shader
+        displacement_shader = cmds.shadingNode('displacementShader', asShader=True)
 
         cmds.connectAttr(material + '.outColor', shading_group + '.surfaceShader', force=True) # Connect material to shading group
         cmds.connectAttr(f"{multiply_divide_node}.output", f"{material}.baseColor", force=True) # Connect multiplyDivide to material
         cmds.connectAttr(f"{baseColor_file_node}.outColor", f"{multiply_divide_node}.input1", force=True) # Connect baseColor file to multiplyDivide
         cmds.connectAttr(f"{bump2d_node}.outNormal", f"{material}.normalCamera", force=True) # Connect bump2d to Normal Camera of material
         cmds.connectAttr(f"{normal_file_node}.outAlpha", f"{bump2d_node}.bumpValue", force=True) # Connect normal file to bump2d
-        cmds.connectAttr(f"{metalness_file_node}.outAlpha", f"{material}.metalness", force=True)
-        cmds.connectAttr(f"{roughness_file_node}.outAlpha", f"{material}.specularRoughness", force=True)
+        cmds.connectAttr(f"{metalness_file_node}.outAlpha", f"{material}.metalness", force=True) # Connect metalness file to material
+        cmds.connectAttr(f"{roughness_file_node}.outAlpha", f"{material}.specularRoughness", force=True) # Connect roughness file to material
+        cmds.connectAttr(f"{height_file_node}.outAlpha", f"{displacement_shader}.displacement", force=True) 
+        cmds.connectAttr(f"{displacement_shader}.displacement", f"{shading_group}.displacementShader", force=True)
+
 
     # open dialog to allow user to choose texture folder
     def showDialog():
