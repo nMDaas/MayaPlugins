@@ -119,45 +119,6 @@ def showWindow():
         cmds.connectAttr(f"{normal_file_node}.outAlpha", f"{bump2d_node}.bumpValue", force=True) # Connect normal file to bump2d
         cmds.connectAttr(f"{metalness_file_node}.outAlpha", f"{material}.metalness", force=True)
         cmds.connectAttr(f"{roughness_file_node}.outAlpha", f"{material}.specularRoughness", force=True)
-    
-    """
-    def get_uv_bounding_box(obj):
-        if not cmds.objExists(obj):
-            print(f"Object '{obj}' does not exist.")
-            return
-
-        # Ensure the object has a shape node
-        shape_node = cmds.listRelatives(obj, shapes=True)
-        if not shape_node:
-            print(f"Object '{obj}' has no shape node.")
-            return
-
-        shape_node = shape_node[0]
-
-        # Get the current UV set name
-        uv_set = cmds.polyUVSet(shape_node, query=True, currentUVSet=True)[0]
-
-        # Get all UV coordinates of the object
-        uv_coords = cmds.polyEditUV(shape_node + '.map[*]', query=True)
-
-        if not uv_coords:
-            print(f"No UV coordinates found for object '{obj}'.")
-            return
-
-        # Separate UV coordinates into U and V lists
-        u_coords = uv_coords[0::2]
-        v_coords = uv_coords[1::2]
-
-        # Calculate the bounding box
-        u_min = min(u_coords)
-        u_max = max(u_coords)
-        v_min = min(v_coords)
-        v_max = max(v_coords)
-
-        print(f"Bounding box of '{obj}' in UV set '{uv_set}':")
-        print(f"U min: {u_min}, U max: {u_max}")
-        print(f"V min: {v_min}, V max: {v_max}")
-    """
 
     # open dialog to allow user to choose texture folder
     def showDialog():
