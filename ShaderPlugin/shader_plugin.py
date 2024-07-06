@@ -11,6 +11,7 @@ import maya.cmds as cmds
 from maya import OpenMayaUI
 from pathlib import Path
 from shiboken2 import wrapInstance
+import math
 import os
 
 #keep track of transform settings created by user
@@ -237,12 +238,52 @@ def showWindow():
     def getSelectedObjects():
         selected_objects = cmds.ls(selection=True)
         return selected_objects[0]
+    
+    def get_uv_bounding_box(u_min, u_max, v_min, v_max):
+        # y(0 - 1) : 1000
+        # y(1 - 2) : 2000
+        v_rounded = math.ceil(v_max)
+        print("v_rounded: ", v_rounded)
+        v_value = v_rounded * 1000
+        print("v_value: ", v_value)
+        # x(0 - 1) : 1
+        # x(1 - 2) : 2
+        # x(8 - 9) : 9 
+        # x(9 - 10) : 10
+        u_value = math.ceil(u_max)
+        return v_value + u_value
+    
+    def get_uv_coordinates(obj):
+        if not cmds.objExists(obj):
+            print(f"Object '{obj}' does not exist.")
+            return
+        # Get all UV coordinates of the object
+        uv_coords = cmds.polyEditUV(obj + '.map[*]', query=True)
+        if not uv_coords:
+            print(f"No UV coordinates found for object '{obj}'.")
+            return
+        # Separate UV coordinates into U and V lists
+        u_coords = uv_coords[0::2]
+        v_coords = uv_coords[1::2]
+        # Calculate the bounding box
+        u_min = min(u_coords)
+        u_max = max(u_coords)
+        v_min = min(v_coords)
+        v_max = max(v_coords)
+        print(f"Bounding box of '{obj}':")
+        print(f"U min: {u_min}, U max: {u_max}")
+        print(f"V min: {v_min}, V max: {v_max}")
+        uv_bounding_box = get_uv_bounding_box(u_min, u_max, v_min, v_max)
+        print("predicted box: ", uv_bounding_box)
+        print("-----")
 
     def apply_texture_to_mesh(obj):
         cmds.select(obj, replace=True)
+
+        get_uv_coordinates(obj)
         
         # Assign the shader to selected meshes
-        cmds.hyperShade(assign="lambert2")
+        #cmds.hyperShade(assign="lambert2")
 
     def apply_textures(selectedObject):
         if cmds.nodeType(selectedObject) == 'transform':
