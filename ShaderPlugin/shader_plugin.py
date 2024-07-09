@@ -190,7 +190,7 @@ def showWindow():
         # get all files in folder_path
         texture_files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
         
-        #material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile
+        result = ""
 
         # organize texture_files by texture numbers
         texture_groups = {}
@@ -234,26 +234,24 @@ def showWindow():
 
             create_ai_standard_surface(material_name, baseColorFile, heightFile, metalnessFile, normalFile, roughnessFile, key)
 
+        return result
+
     # Set object/group to be textuerd
     def getSelectedObjects():
         selected_objects = cmds.ls(selection=True)
         return selected_objects[0]
     
-    def get_uv_bounding_box(u_min, u_max, v_min, v_max):
-        # y(0 - 1) : 1000
-        # y(1 - 2) : 2000
+    # Get uv bounding box of object based on u_max and v_max value
+    def get_uv_bounding_box_from_uv_coords(u_max, v_max):
         v_rounded = math.ceil(v_max)
-        print("v_rounded: ", v_rounded)
+        #print("v_rounded: ", v_rounded)
         v_value = v_rounded * 1000
-        print("v_value: ", v_value)
-        # x(0 - 1) : 1
-        # x(1 - 2) : 2
-        # x(8 - 9) : 9 
-        # x(9 - 10) : 10
+        #print("v_value: ", v_value)
         u_value = math.ceil(u_max)
         return v_value + u_value
     
-    def get_uv_coordinates(obj):
+    # Get min and max UV coordinates of object
+    def get_uv_bounding_box(obj):
         if not cmds.objExists(obj):
             print(f"Object '{obj}' does not exist.")
             return
@@ -270,35 +268,53 @@ def showWindow():
         u_max = max(u_coords)
         v_min = min(v_coords)
         v_max = max(v_coords)
-        print(f"Bounding box of '{obj}':")
-        print(f"U min: {u_min}, U max: {u_max}")
-        print(f"V min: {v_min}, V max: {v_max}")
-        uv_bounding_box = get_uv_bounding_box(u_min, u_max, v_min, v_max)
-        print("predicted box: ", uv_bounding_box)
-        print("-----")
+        #print(f"Bounding box of '{obj}':")
+        #print(f"U min: {u_min}, U max: {u_max}")
+        #print(f"V min: {v_min}, V max: {v_max}")
+        uv_bounding_box = get_uv_bounding_box_from_uv_coords(u_max, v_max)
+        return uv_bounding_box
+        #print("predicted box: ", uv_bounding_box)
+        #print("-----")
 
-    def apply_texture_to_mesh(obj):
+    def get_material(mat_name, uv_bounding_box):
+        mat_name = mat_name.replace(" ", "")
+        uv_bounding_box = str(uv_bounding_box)
+        uv_bounding_box = uv_bounding_box.replace(" ", "")
+        materials = cmds.ls(materials=True)
+        print(materials)
+        for mat in materials:
+            if mat_name in mat and uv_bounding_box in mat:
+                print("found material ", mat_name)
+                return mat
+        print("texture with *", mat_name, "* + *", uv_bounding_box, "* does not exist")
+
+    # Apply correct texture to object
+    def apply_texture_to_mesh(material_name, obj):
         cmds.select(obj, replace=True)
-
-        get_uv_coordinates(obj)
+        bounding_box = get_uv_bounding_box(obj)
+        material = get_material(material_name,bounding_box)
         
-        # Assign the shader to selected meshes
-        #cmds.hyperShade(assign="lambert2")
+        # Assign the shader to selected object
+        cmds.hyperShade(assign=material)
 
-    def apply_textures(selectedObject):
+        print("assigning ", material, " to ", obj)
+        print("---")
+
+    def apply_textures(selectedObject, mat_name):
+        #print(cmds.nodeType(selectedObject))
         if cmds.nodeType(selectedObject) == 'transform':
             #print("group node: ", selectedObject)
             children = cmds.listRelatives(selectedObject, children=True, fullPath=True) or []
             for child in children:
-                apply_textures(child)
+                apply_textures(child, mat_name)
         if cmds.nodeType(selectedObject) == 'mesh':
-            apply_texture_to_mesh(selectedObject)
+            apply_texture_to_mesh(mat_name, selectedObject)
 
     #apply button clicked
     def apply():
-        #create_textures()
         selectedObject = getSelectedObjects()
-        apply_textures(selectedObject)
+        mat_name = create_textures()
+        apply_textures(selectedObject, mat_name)
 
 #Close dialog
     def close():
