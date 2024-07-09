@@ -8,3 +8,4 @@ TODO
 - edit UI box
 - huge undo 
 - successful output statements
+- groups?
