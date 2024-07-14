@@ -11,6 +11,7 @@ import maya.cmds as cmds
 from maya import OpenMayaUI
 from pathlib import Path
 from shiboken2 import wrapInstance
+from functools import wraps
 import math
 import os
 
@@ -24,6 +25,22 @@ class Transform():
         self.shape = None
         self.duplicate = False
         self.num_duplicate = 0
+
+def one_undo(func):
+    """
+    Decorator - guarantee close chunk.
+    type: (function) -> function
+    """
+    @wraps(func)
+    def wrap(*args, **kwargs):
+        try:
+            cmds.undoInfo(openChunk=True)
+            return func(*args, **kwargs)
+        except Exception as e:
+            raise e
+        finally:
+            cmds.undoInfo(closeChunk=True)
+    return wrap
         
 #show gui window
 def showWindow():
@@ -314,6 +331,7 @@ def showWindow():
             apply_texture_to_mesh(mat_name, selectedObject)
 
     #apply button clicked
+    @one_undo
     def apply():
         ui.warnings.setStyleSheet("color: red;")
 

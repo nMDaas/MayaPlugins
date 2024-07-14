@@ -3,7 +3,6 @@ TODO
 - Cleanup print statements 
 
 - automatic optimize + clean 
-- huge undo 
 - what else - groups?
 
 Notes for readme
