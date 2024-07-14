@@ -20,8 +20,8 @@ This plugin was developed to address the problems with the default Adobe Substan
 The default plugin is not a huge problem if you have 1-2 objects with few shells.However, using the plugin becomes extremely inefficient if you have multiple  objects or a group of objects with multiple shells. These inefficiencies are described below:
 * The default plugin only allows you to create one material at a time. If you have a plant group object with 1 stem, 1 pot, 1 soil object, 5 leaves, and 5 stems, you are forced to repeat the same material process creation 13 times
 * Once materials are created, it is a tedious process to figure out which object is mapped to which box in the UV layout and assign the correct texture accordingly
--  The user has to open up the UV Layout window and Hypershade window to assign texture, which clutters the screen
-- The user has to assign textures 13 times to the correct objects
+    -  The user has to open up the UV Layout window and Hypershade window to assign texture, which clutters the screen
+    - The user has to assign textures 13 times to the correct objects
 
  ## The Solution
  This plugin has the following features:
@@ -45,8 +45,8 @@ The default plugin is not a huge problem if you have 1-2 objects with few shells
  * Assign your selected object or group of obejcts to a different texture
  * Edit > Delete By All Type > History
  * File > Optimize Scene Size (Click on the Options Box on the Side)
-- WARNING: This will delete any unused materials. Make sure all the materials you want to keep in your hypershade are at least assigned to a dummy object
-- Make sure the "Rendering nodes" box is ticked
-- Click Optimize
-- Click OK 
+    - WARNING: This will delete any unused materials. Make sure all the materials you want to keep in your hypershade are at least assigned to a dummy object
+    - Make sure the "Rendering nodes" box is ticked
+    - Click Optimize
+    - Click OK 
 * Rerun the plugin the same way. You might also need to repeat the instructions in the section above
