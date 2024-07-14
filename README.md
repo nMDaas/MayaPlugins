@@ -10,7 +10,7 @@ This is an ongoing project that enables rapid creation of stylized and customiza
 
 ### Plant Generator Output & GUI Design:  
 
-<img src="https://github.com/nMDaas/MayaPlugins/blob/main/images/myPluginCollage.jpg" alt="drawing"/>
+![Image of Key](https://github.com/nMDaas/MayaPlugins/blob/main/images/myPluginCollage.jpg)
 
 ## AI Standard Surface Substance Painter Plugin
 
