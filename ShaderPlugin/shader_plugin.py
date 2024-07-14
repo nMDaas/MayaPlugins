@@ -302,7 +302,6 @@ def showWindow():
         cmds.hyperShade(assign=material)
 
         print("assigning ", material, " to ", obj)
-        print("---")
 
     def apply_textures(selectedObject, mat_name):
         #print(cmds.nodeType(selectedObject))
@@ -324,17 +323,11 @@ def showWindow():
         if folder_path == "":
             ui.warnings.setText("Must select a folder path to folder textures")
         else:
-            print("trying to do stuff")
-            #mat_name = create_textures()
-            #apply_textures(selectedObject, mat_name)
-
-#Close dialog
-    def close():
-        ui.done(0)
+            mat_name = create_textures()
+            apply_textures(selectedObject, mat_name)
 
     #connect buttons to functions
     ui.apply_button.clicked.connect(partial(apply))
-    ui.close_button.clicked.connect(partial(close))
     ui.select_button.clicked.connect(partial(showDialog))
      
     # show the QT ui
