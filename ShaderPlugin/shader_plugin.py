@@ -302,10 +302,8 @@ def showWindow():
         uv_bounding_box = str(uv_bounding_box)
         uv_bounding_box = uv_bounding_box.replace(" ", "")
         materials = cmds.ls(materials=True)
-        print(materials)
         for mat in materials:
             if mat_name in mat and uv_bounding_box in mat:
-                print("found material ", mat_name)
                 return mat
         print("texture with *", mat_name, "* + *", uv_bounding_box, "* does not exist")
 
