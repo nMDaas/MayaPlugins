@@ -1,20 +1,20 @@
-## Plant Generator Plugin
+# Plant Generator Plugin
 This is an ongoing project that enables rapid creation of stylized and customizable plants. 
 * This tool can quickly generate variations of a leaf from a base model using distortion, tilting and scaling
 * The user can swiftly distribute of leaves around an object (like a stem) or in a concentrated location
 
-# Plant Generator Output:  
+## Plant Generator Output:  
 
 <img src="https://github.com/nMDaas/MyPlugins/blob/main/images/render3.jpg" alt="drawing" width="500"/>
 <img src="https://github.com/nMDaas/MyPlugins/blob/main/images/plantGen.jpg" alt="drawing" width="200"/>
 <img src="https://github.com/nMDaas/MyPlugins/blob/main/images/render2.jpg" alt="drawing" width="500"/>
 
-### GUI Design:  
+## GUI Design:  
 <img src="https://github.com/nMDaas/MyPlugins/blob/main/images/GUI.png" alt="drawing" width="500"/>
 
-## AI Standard Surface Substance Painter Plugin
+# AI Standard Surface Substance Painter Plugin
 
-# The Problem
+## The Problem
 This plugin was developed to address the problems with the default Adobe Substance Painter used in Maya.
 
 The default plugin is not a huge problem if you have 1-2 objects with few shells.However, using the plugin becomes extremely inefficient if you have multiple  objects or a group of objects with multiple shells. These inefficiencies are described below:
@@ -23,19 +23,19 @@ The default plugin is not a huge problem if you have 1-2 objects with few shells
 -  The user has to open up the UV Layout window and Hypershade window to assign texture, which clutters the screen
 - The user has to assign textures 13 times to the correct objects
 
- # The Solution
+ ## The Solution
  This plugin has the following features:
  * Allows selection of desired folder of textures
  * Allows you to select an object, group of objects, or nested group of objects
  * Creates as many AI Standard Surface textures as contained in the folder selected 
  * Automatically assigns newly created materials to correct objects
 
- # How to Use This Plugin
+ ## How to Use This Plugin
  * While exporting texture files from Adobe Substance Painter, make sure you export the files with default names given by the program. Do NOT change these file names to something custom
  * For each texture in the folder, there must be a file for BaseColor, Roughness, Metalness, Height and Normal
  * After following the tool instructions and clicking 'Apply', if you realize you have to reimport the textures, undo. Make sure the material has been removed from the object and that the materials are gone from the Hypershade
 
- # Materials Created but Have No File Textures Applied or Node/Texture not Found
+ ## Materials Created but Have No File Textures Applied or Node/Texture not Found
  * Go to one of the newly created AI Standard Surface materials
  * Locate the BaseColor file for the material
  * Click on the open folder icon next to Image Name and locate the correct texture file on your device
