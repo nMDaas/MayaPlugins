@@ -3,7 +3,7 @@ Here are some of the Maya plugins I have worked on! Click on the plugin to go to
 * [Plant Generator Plugin](https://github.com/nMDaas/MayaPlugins/tree/main#plant-generator-plugin)
 * [AI Standard Surface Substance Painter Plugin](https://github.com/nMDaas/MayaPlugins/tree/main#ai-standard-surface-substance-painter-plugin)
 
-## How To Use
+## How To Use Any Plugin
 * Download folder for the plugin you want to use
 * In the execute.py file, update the line with "folder =" to be the path to the plugin folder on your computer
 * Open the "execute_tool.py" file in the Maya script editor
