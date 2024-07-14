@@ -13,10 +13,10 @@ folder = '/Users/natashadaas/MyPlugins'
 if folder not in sys.path:
     sys.path.append(folder)
 
-if 'ShaderPlugin' in sys.modules:
-    del sys.modules['ShaderPlugin']
-if 'ShaderPlugin.shader_plugin' in sys.modules:
-    del sys.modules['ShaderPlugin.shader_plugin']
-import ShaderPlugin.shader_plugin
+if 'AIStandardSurfaceSubstancePainterPlugin' in sys.modules:
+    del sys.modules['AIStandardSurfaceSubstancePainterPlugin']
+if 'AIStandardSurfaceSubstancePainterPlugin.shader_plugin' in sys.modules:
+    del sys.modules['AIStandardSurfaceSubstancePainterPlugin.shader_plugin']
+import AIStandardSurfaceSubstancePainterPlugin.shader_plugin
 
-window = ShaderPlugin.shader_plugin.showWindow()
+window = AIStandardSurfaceSubstancePainterPlugin.shader_plugin.showWindow()
