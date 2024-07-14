@@ -1,7 +1,7 @@
 # Maya Plugins
-Here are some of the Maya plugins I have worked on!
-* [Plant Generator Plugin](#https://github.com/nMDaas/MayaPlugins?tab=readme-ov-file#plant-generator-plugin)
-* [AI Standard Surface Substance Painter Plugin][#https://github.com/nMDaas/MayaPlugins?tab=readme-ov-file#ai-standard-surface-substance-painter-plugin]
+Here are some of the Maya plugins I have worked on! Click on the plugin to go to its section: 
+* [Plant Generator Plugin](https://github.com/nMDaas/MayaPlugins?tab=readme-ov-file#plant-generator-plugin)
+* [AI Standard Surface Substance Painter Plugin](https://github.com/nMDaas/MayaPlugins?tab=readme-ov-file#ai-standard-surface-substance-painter-plugin)
 
 ## Plant Generator Plugin
 This is an ongoing project that enables rapid creation of stylized and customizable plants using variations of an existing model.
