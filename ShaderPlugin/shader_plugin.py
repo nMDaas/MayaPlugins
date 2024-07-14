@@ -239,7 +239,11 @@ def showWindow():
     # Set object/group to be textuerd
     def getSelectedObjects():
         selected_objects = cmds.ls(selection=True)
-        return selected_objects[0]
+        if len(selected_objects) == 0:
+            ui.warnings.setText("Must select an object or group of objects")
+        else:
+            ui.warnings.setText("")
+            return selected_objects[0]
     
     # Get uv bounding box of object based on u_max and v_max value
     def get_uv_bounding_box_from_uv_coords(u_max, v_max):
@@ -312,9 +316,17 @@ def showWindow():
 
     #apply button clicked
     def apply():
+        ui.warnings.setStyleSheet("color: red;")
+
+        global folder_path
         selectedObject = getSelectedObjects()
-        mat_name = create_textures()
-        apply_textures(selectedObject, mat_name)
+        
+        if folder_path == "":
+            ui.warnings.setText("Must select a folder path to folder textures")
+        else:
+            print("trying to do stuff")
+            #mat_name = create_textures()
+            #apply_textures(selectedObject, mat_name)
 
 #Close dialog
     def close():
