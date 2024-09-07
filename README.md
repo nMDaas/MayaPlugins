@@ -39,7 +39,14 @@ This tool allows several features to streamline the plant modeling process:
 * Plant part _(leaf,stem)_ duplication + modification
 * Distribution of multiple plant parts _(stems)_ throughout top of object _(pot)_
 * Distribution of single plant part _(leaf)_ at top of object _(stem)_
+<img src="https://github.com/nMDaas/PlantGeneratorPluginMaya/blob/main/images/plant1.jpg" alt="drawing" width="500"/>
 
 #### Demo #2
 * Creation of branch system around a stem
 * Plant part tilting
+<img src="https://github.com/nMDaas/PlantGeneratorPluginMaya/blob/main/images/plant2.jpg" alt="drawing" width="500"/>
+
+#### More Results From This Tool:
+<img src="https://github.com/nMDaas/PlantGeneratorPluginMaya/blob/main/images/plant3.jpg" alt="drawing" width="500"/>
+<img src="https://github.com/nMDaas/PlantGeneratorPluginMaya/blob/main/images/render3.jpg" alt="drawing" width="500"/>
+<img src="https://github.com/nMDaas/PlantGeneratorPluginMaya/blob/main/images/plantGen.jpg" alt="drawing" width="500"/>
