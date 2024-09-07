@@ -7,7 +7,7 @@ import sys
 
 #SET THIS FOLDER to the parent folder that you've downloaded the repository to
 #or ensure that the parent folder is added to your PYTHONPATH
-folder = '/Users/natashadaas/MyPlugins'
+folder = '/Users/natashadaas/PlantGeneratorPluginMaya'
 
 #check if folder is part of PYTHONPATH and if not, add it
 if folder not in sys.path:

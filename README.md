@@ -2,7 +2,7 @@
 I developed this tool to eliminate inefficient processes in plant modeling such as duplicating plant parts, modifying plants parts individually and correctly placing plant parts so they are connected to the rest of the plant. 
 
 ## How To Use
-* Download folder for the plugin you want to use
+* Download code and separate PlantGenerator folder in the downloaded folder
 * In the execute.py file, update the line with "folder =" to be the path to the plugin folder on your computer
 * Open the "execute_tool.py" file in the Maya script editor
 * Run the script
