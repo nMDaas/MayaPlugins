@@ -1,7 +1,9 @@
 # Plant Generator Plugin for Maya
 I developed this tool to eliminate inefficient processes in plant modeling such as duplicating plant parts, modifying plants parts individually and correctly placing plant parts so they are connected to the rest of the plant. 
-- Eliminated inefficiencies in plant part modeling by enabling one-click bulk duplication and  connection.
-- Provided distortion, tilting and scaling options via a user-friendly GUI to allow customizable plant geometry.
+- Developed this tool using Python, MEL scripting and Qt.
+- Eliminated inefficiencies in plant part modeling by enabling one-click bulk duplication, modification, and connection.
+- Provided distortion, tilting and scaling options via a user-friendly GUI to allow customization over plant geometry.
+
 
 ## How To Use
 * Download code and separate PlantGenerator folder in the downloaded folder
